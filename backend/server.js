@@ -2,7 +2,6 @@ const express = require('express');
 const session = require('express-session');
 const store = require('better-express-store');
 const app = express();
-const RestApi = require('./RestApi')
 
 app.use(express.json());
 
