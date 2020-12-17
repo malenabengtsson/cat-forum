@@ -1,6 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const store = require('better-express-store');
+const restRoutes = require('./routes/restRoutes')
 const app = express();
 
 app.use(express.json());
@@ -13,8 +14,11 @@ app.use(session({
   store: store({dbPath: '../cat-forum.db'})
 }))
 
-app.listen(3000, () =>{
+app.listen(8080, () =>{
   console.log('Listening on port 3000');
 })
 
-new RestApi(app);
+app.use("/rest", restRoutes)
+
+
+

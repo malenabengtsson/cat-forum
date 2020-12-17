@@ -1,9 +1,12 @@
-const DB = require("../DB");
-const path = require("path");
-const dbPath = path.join(__dirname, "../databases/foodStore.db");
-const db = new DB(dbPath);
+const sqlite3 = require('better-sqlite3')
+const db = sqlite3('../cat-forum.db');
 
 const getUsers = async (req, res) =>{
-   let result = await db.all(/*sql*/ `SELECT * FROM users`);
-   res.json(result);
+   let statement = db.prepare(/*sql*/ `SELECT * FROM users`);
+
+   res.json(statement.all());
+}
+
+module.exports = {
+   getUsers
 }
