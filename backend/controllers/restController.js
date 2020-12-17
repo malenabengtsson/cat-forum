@@ -1,7 +1,9 @@
-const sqlite3 = require('better-sqlite3');
+const DB = require("../DB");
+const path = require("path");
+const dbPath = path.join(__dirname, "../databases/foodStore.db");
+const db = new DB(dbPath);
 
 const getUsers = async (req, res) =>{
-   let statement = await db.prepare(/*sql*/ `SELECT * FROM Dietary_Restrictions`);
-   let result = statement.all()
+   let result = await db.all(/*sql*/ `SELECT * FROM users`);
    res.json(result);
 }
