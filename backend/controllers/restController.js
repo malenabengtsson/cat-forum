@@ -7,6 +7,13 @@ const getUsers = async (req, res) =>{
    res.json(statement.all());
 }
 
+const getSubjects = async (req, res) => {
+   let statement = db.prepare(/*sql*/`
+   SELECT * FROM subjects`)
+   res.json(statement.all())
+}
+
 module.exports = {
-   getUsers
+   getUsers,
+   getSubjects
 }

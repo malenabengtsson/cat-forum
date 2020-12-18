@@ -1,9 +1,10 @@
 import React from 'react'
+import SubjectList from '../components/SubjectList'
 
 const Home = () => {
   return (
     <div>
-      Home page
+      <SubjectList/>
     </div>
     
   )
