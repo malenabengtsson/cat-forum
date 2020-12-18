@@ -8,21 +8,25 @@ import {
   NavItem,
   NavLink,
 } from 'reactstrap';
+import { useHistory } from "react-router-dom";
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
-
+  let history = useHistory();
   const toggle = () => setIsOpen(!isOpen);
 
+    const goToHomePage = () => {
+      history.push("/");
+    };
   return (
    <div>
       <Navbar color="light" light expand="md">
-        <NavbarBrand href="/">Cat forum</NavbarBrand>
+        <NavbarBrand onClick={goToHomePage}>Cat forum</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
             <NavItem>
-              <NavLink href="https://github.com/reactstrap/reactstrap">Logga in</NavLink>
+              <NavLink >Logga in</NavLink>
             </NavItem>
           </Nav>
         </Collapse>

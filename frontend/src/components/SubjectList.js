@@ -1,14 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import SubjectItem from './SubjectItem'
+import { SubjectContext} from '../contexts/SubjectContextProvider'
 
 const SubjectList = () => {
-  const [subjects, setSubjects] = useState(null);
-
-  const fetchSubjects = async () => {
-    let result = await fetch('/rest/subjects')
-    result = await result.json();
-    console.log(result);
-    setSubjects(result);
-  }
+  const { fetchSubjects, subjects } = useContext(SubjectContext)
 
   useEffect(() => {
     fetchSubjects();
@@ -17,7 +12,7 @@ const SubjectList = () => {
   return (
     <div>
       {subjects && subjects.map((subject, i) => {
-       return <p>{subject.title}</p> 
+       return <SubjectItem subject={subject} key={i}/> 
       })}
     </div>
   )
