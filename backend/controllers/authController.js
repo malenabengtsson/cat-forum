@@ -13,6 +13,7 @@ res.json(statement.run(req.body))
 }
 
 const login = async (req, res) =>{
+  console.log('In login');
    if (req.body.password) {
         req.body.password = Encrypt.multiEncrypt(req.body.password);
       }
@@ -26,6 +27,7 @@ const login = async (req, res) =>{
         // store the logged in user in a session
         req.session.user = user;
       }
+      console.log(user);
       res.json(user);
 }
 

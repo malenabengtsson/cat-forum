@@ -2,6 +2,7 @@ import React from 'react'
 import { Switch, Route, BrowserRouter } from "react-router-dom";
 
 import SubjectContextProvider from "./contexts/SubjectContextProvider";
+import UserContextProvider from './contexts/UserContextProvider'
 
 import Home from './pages/Home'
 import Header from './components/Header'
@@ -14,12 +15,14 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <SubjectContextProvider>
+          <UserContextProvider>
         <Header />
         <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/:subject" component={ThreadList}/>
         <Route exact path="/:subject/:thread" component={ReplyList}/>
         </Switch>
+          </UserContextProvider>
         </SubjectContextProvider>
       </div>
     </BrowserRouter>
