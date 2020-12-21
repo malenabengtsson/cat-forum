@@ -2,6 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const store = require('better-express-store');
 const restRoutes = require('./routes/restRoutes')
+const authRoutes = require('./routes/authRoutes')
 const app = express();
 
 app.use(express.json());
@@ -19,6 +20,7 @@ app.listen(8080, () =>{
 })
 
 app.use("/rest", restRoutes)
+app.use("/auth", authRoutes)
 
 
 

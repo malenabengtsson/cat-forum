@@ -25,17 +25,15 @@ const getReplies = async (req, res) =>{
    let statement = db.prepare(/*sql*/ `
    SELECT replies.* FROM replies, threads WHERE replies.threadId = $threadId AND threads.id = $threadId `)
 
-   res.json(statement.all({threadId : req.params.threadId}))
+ res.json(statement.all({threadId : req.params.threadId}))
 };
 
 const createThread = async (req, res) =>{
    console.log('In create thread');
    let statement = db.prepare(/*sql*/`
-   INSERT into threads (title, subjectId, creator) VALUES ($title, $subjectId, $creator)`)
+   INSERT into $table (title, subjectId, creator) VALUES ($title, $subjectId, $creator)`)
 
-   res.json(statement.run({table : 'threads', title: req.body.title, subjectId: req.params.subjectId, creator: 'AnnaBanana'}))
-}
-
+   res.json(statement.run({table : threads, title: req.body.title, subjectId: req.params.subjectId, creator: 'AnnaBanana'}))}
 const createReply = async (req, res) =>{
    console.log('In create reply');
    let statement = db.prepare(/*sql*/`INSERT INTO replies (message, threadId, timestamp, sender) VALUES ($message, $threadId, $timestamp, $sender)

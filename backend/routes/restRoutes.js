@@ -9,4 +9,5 @@ router.get('/replies/:threadId', restController.getReplies),
 router.post('/threads/:subjectId', restController.createThread)
 router.post('/replies/:threadId', restController.createReply)
 
+
 module.exports = router;
