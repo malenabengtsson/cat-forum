@@ -4,6 +4,7 @@ export const SubjectContext = createContext();
 
 const SubjectContextProvider = (props) => {
 const [chosenSubject, setChosenSubject] = useState('')
+const [chosenThread, setChosenThread] = useState('');
 const [subjects, setSubjects] = useState('')
 
 const fetchSubjects = async () => {
@@ -17,6 +18,8 @@ const fetchSubjects = async () => {
     chosenSubject,
     setChosenSubject,
     fetchSubjects,
+    chosenThread,
+    setChosenThread
   };
 
   return (

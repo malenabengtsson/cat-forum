@@ -7,7 +7,6 @@ import {
 import {SubjectContext} from '../contexts/SubjectContextProvider'
 
 const SubjectItem = ({subject}) =>{
-  console.log(subject);
   const {setChosenSubject} = useContext(SubjectContext)
   let history = useHistory();
   

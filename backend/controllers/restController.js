@@ -15,14 +15,23 @@ const getSubjects = async (req, res) => {
 
 const getThreads = async (req, res) =>{
    let statement = db.prepare(/*sql*/`
-   SELECT threads.id, threads.title FROM threads, subjects WHERE threads.subjectId = $subjectId AND subjects.id = $subjectId
+   SELECT threads.* FROM threads, subjects WHERE threads.subjectId = $subjectId AND subjects.id = $subjectId
    `)
 
    res.json(statement.all({subjectId : req.params.subjectId }))
 }
 
+const getReplies = async (req, res) =>{
+   let statement = db.prepare(/*sql*/ `
+   SELECT replies.* FROM replies, threads WHERE replies.threadId = $threadId AND threads.id = $threadId `)
+
+   res.json(statement.all({threadId : req.params.threadId}))
+};
+
+
 module.exports = {
-   getUsers,
-   getSubjects,
-   getThreads
-}
+  getUsers,
+  getSubjects,
+  getThreads,
+  getReplies,
+};
