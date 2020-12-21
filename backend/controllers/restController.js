@@ -28,10 +28,32 @@ const getReplies = async (req, res) =>{
    res.json(statement.all({threadId : req.params.threadId}))
 };
 
+const createThread = async (req, res) =>{
+   console.log('In create thread');
+   let statement = db.prepare(/*sql*/`
+   INSERT into threads (title, subjectId, creator) VALUES ($title, $subjectId, $creator)`)
+
+   res.json(statement.run({table : 'threads', title: req.body.title, subjectId: req.params.subjectId, creator: 'AnnaBanana'}))
+}
+
+const createReply = async (req, res) =>{
+   console.log('In create reply');
+   let statement = db.prepare(/*sql*/`INSERT INTO replies (message, threadId, timestamp, sender) VALUES ($message, $threadId, $timestamp, $sender)
+   `)
+
+   res.json(statement.run({table: 'replies', 
+message: req.body.message,
+threadId: req.params.threadId,
+timestamp: Date.now(),
+sender: 'Bert Fjert'}))
+}
+
 
 module.exports = {
   getUsers,
   getSubjects,
   getThreads,
   getReplies,
+  createThread,
+  createReply
 };
