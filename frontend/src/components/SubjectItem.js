@@ -12,7 +12,7 @@ const SubjectItem = ({subject}) =>{
   
   const goToSubject = () =>{
     setChosenSubject(subject);
-    history.push("/" + subject.title.replace(' ', '-'));
+    history.push("/" + subject.title.replace(/\s+/g, '-'));
 
   }
 

@@ -11,23 +11,23 @@ const LoginModal = (props) => {
   const performLogin = async (e) => {
     console.log('In login method in frontend');
     e.preventDefault();
+
     const credentials =
      {email: email,
-    password: password}
+      password: password
+    }
+    console.log(credentials);
 
-    let response = await fetch("/auth/login", {
+    await fetch("/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(credentials),
     });
 
-    if (response.url.includes("error")) {
-      setErrorMessageShown(true);
-    } else {
       fetchUser();
       setErrorMessageShown(false);
       props.setModalIsOpen(!props.modalIsOpen);
-    }
+    
   };
   return (
     <div className="row mx-auto authentication-modals">

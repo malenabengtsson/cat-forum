@@ -32,7 +32,7 @@ const Header = () => {
      };
 
      const logout = async () => {
-       let res = await fetch("/rest/auth/logout");
+       let res = await fetch("/auth/logout");
        setUser(null);
        history.push("/");
      };

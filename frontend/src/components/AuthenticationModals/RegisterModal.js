@@ -18,7 +18,7 @@ const RegisterModal = (props) => {
       password: password    
     };
 
-    let response = await fetch("/rest/auth/register", {
+    let response = await fetch("/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userInformation),

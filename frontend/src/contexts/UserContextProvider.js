@@ -7,7 +7,9 @@ const UserContextProvider = (props) => {
   const [user, setUser] = useState(null);
 
   const fetchUser = async () => {
-    let res = await fetch("/rest/auth/whoami");
+    console.log('In fetch user');
+    let res = await fetch("/auth/whoami");
+   
     try {
       if (res.ok) {
         res = await res.json();
@@ -22,6 +24,10 @@ const UserContextProvider = (props) => {
     fetchUser();
   }, []);
 
+  useEffect(() => {
+    console.log(user);
+  }, [user]); 
+  
   const values = {
     user,
     fetchUser,

@@ -8,7 +8,7 @@ const ThreadItem = ({thread}) =>{
 
   const goToReplyPage = () =>{
     setChosenThread(thread);
-    history.push("/" + chosenSubject.title.replace(" ", "-") + "/" + thread.title.replace(' ', '-'));
+    history.push("/" + chosenSubject.title.replace(/\s+/g, '-') + "/" + thread.title.replace(/\s+/g, '-'));
 
   }
 

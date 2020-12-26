@@ -19,8 +19,8 @@ app.listen(8080, () =>{
   console.log('Listening on port 8080');
 })
 
-app.use("/rest", restRoutes)
 app.use("/auth", authRoutes)
+app.use("/rest", restRoutes)
 
 
 
