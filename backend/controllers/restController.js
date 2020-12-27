@@ -1,11 +1,6 @@
 const sqlite3 = require('better-sqlite3')
 const db = sqlite3('../cat-forum.db');
 
-const getUsers = async (req, res) =>{
-   let statement = db.prepare(/*sql*/ `SELECT * FROM users`);
-
-   res.json(statement.all());
-}
 
 const getSubjects = async (req, res) => {
    let statement = db.prepare(/*sql*/`
@@ -31,24 +26,29 @@ const getReplies = async (req, res) =>{
 const createThread = async (req, res) =>{
    console.log('In create thread');
    let statement = db.prepare(/*sql*/`
-   INSERT into $table (title, subjectId, creator) VALUES ($title, $subjectId, $creator)`)
+   INSERT into threads (title, subjectId, creator) VALUES ($title, $subjectId, $creator)`)
 
-   res.json(statement.run({table : threads, title: req.body.title, subjectId: req.params.subjectId, creator: 'AnnaBanana'}))}
+   res.json(statement.run({title: req.body.title, subjectId: req.params.subjectId, creator: req.body.creator}))}
 const createReply = async (req, res) =>{
    console.log('In create reply');
    let statement = db.prepare(/*sql*/`INSERT INTO replies (message, threadId, timestamp, sender) VALUES ($message, $threadId, $timestamp, $sender)
    `)
 
-   res.json(statement.run({table: 'replies', 
+   res.json(statement.run({ 
 message: req.body.message,
 threadId: req.params.threadId,
 timestamp: Date.now(),
-sender: 'Bert Fjert'}))
+sender: req.body.sender}))
+}
+
+const getThreadByTitle = async (req, res) => {
+   let statement = db.prepare(/*sql*/`SELECT threads.id FROM threads WHERE threads.title = $title`);
+   
+   res.json(statement.get({$title: req.body.title}))
 }
 
 
 module.exports = {
-  getUsers,
   getSubjects,
   getThreads,
   getReplies,

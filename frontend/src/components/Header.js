@@ -48,7 +48,7 @@ const Header = () => {
           <Nav className="ml-auto" navbar>
             {user === null ? (
               <>
-                <NavItem className="" onClick={() => toggleModal}>
+                <NavItem>
                   <NavLink
                     className="pointer"
                     onClick={toggleModal}
