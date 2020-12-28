@@ -15,7 +15,8 @@ const RegisterModal = (props) => {
     let userInformation = {
       email: email,
       username: username,
-      password: password    
+      password: password,
+      roleId: 1    
     };
 
     let response = await fetch("/auth/register", {
@@ -29,7 +30,7 @@ const RegisterModal = (props) => {
     } else {
       setErrorMessageShown(false);
       fetchUser();
-      props.setModalIsOpen(props.modalIsOpen);
+      props.setModalIsOpen(!props.modalIsOpen);
     }
   };
   return (
@@ -82,7 +83,7 @@ const RegisterModal = (props) => {
                 Det finns redan ett konto med den emailadressen
               </div>
             ) : (
-              <Label for="password" className="tradeHub-white font-weight-bold">
+              <Label for="password" className="text-white font-weight-bold">
                 ----
               </Label>
             )}

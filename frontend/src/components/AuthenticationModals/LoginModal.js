@@ -53,11 +53,7 @@ const LoginModal = (props) => {
             />
           </FormGroup>
           <FormGroup className="col-xs-8 col-sm-12 col-md-12 col-lg-12 mt-2">
-            <Label
-              for="password"
-            >
-              Password
-            </Label>
+            <Label for="password">Password</Label>
             <Input
               required
               className="light-grey-background tradeHub-input"
@@ -83,10 +79,12 @@ const LoginModal = (props) => {
         <div className="text-center m-4">
           <p className="font-italic mb-0">Har du inte ett konto?</p>
           <p className="font-italic">
-            {" "}              
+            {" "}
             Skapa konto{" "}
-            <span className="text-primary click-text inline">
-              <span onClick={() => props.setIsRegistered(props.isRegistered)}>här</span>
+            <span className="text-primary inline pointer">
+              <span onClick={() => props.setIsRegistered(!props.isRegistered)}>
+                här
+              </span>
             </span>
           </p>
         </div>

@@ -18,8 +18,8 @@ const login = async (req, res) =>{
         req.body.password = Encrypt.multiEncrypt(req.body.password);
       }
       let statement = db.prepare(/*sql*/`
-         SELECT * FROM users
-         WHERE email = $email AND password = $password
+         SELECT u.id, u.email, u.username, r.userRole FROM users as u, roles as r
+         WHERE u.email = $email AND u.password = $password AND r.id = u.roleId
       `);
       let user = statement.get(req.body) || null;
       if (user) {
