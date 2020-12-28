@@ -26,18 +26,26 @@ const ThreadList = () =>{
    fetchThreads()
   }, [])
 
-  return(
+  return (
     <div>
-      {user ? <div><Button onClick={toggle}>Create new thread</Button>
-        <CreateNewThreadModal
-          toggle={toggle}
-          modal={modal}
-          setModal={setModal}
-      /></div> : ''}
-      {threads && threads.map((thread, i) =>{
-        return <ThreadItem thread={thread} key={i}/>
-      })}
+      {user ? (
+        <div>
+          <Button onClick={toggle}>Create new thread</Button>
+          <CreateNewThreadModal
+            toggle={toggle}
+            modal={modal}
+            setModal={setModal}
+            fetchThreads={fetchThreads}
+          />
+        </div>
+      ) : (
+        ""
+      )}
+      {threads &&
+        threads.map((thread, i) => {
+          return <ThreadItem thread={thread} key={i} />;
+        })}
     </div>
-  )
+  );
 }
 export default ThreadList;

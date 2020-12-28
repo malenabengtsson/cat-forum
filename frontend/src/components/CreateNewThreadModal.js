@@ -38,10 +38,11 @@ const CreateNewThreadModal = (props) => {
       body: JSON.stringify(replyInformation),
    });
    props.toggle()
+   props.fetchThreads()
  }
   return (
     <div className="row mx-auto">
-      <Modal isOpen={props.modal} >
+      <Modal isOpen={props.modal} toggle={props.toggle} >
       <h2 className="text-center mt-4 tradeHub-orange font-weight-bold col-12">
         Create new thread
       </h2>
@@ -69,7 +70,7 @@ const CreateNewThreadModal = (props) => {
             </Label>
             <Input
               required
-              type="text"
+              type="textarea"
               placeholder="Message"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
