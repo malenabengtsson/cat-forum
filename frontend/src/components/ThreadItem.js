@@ -17,7 +17,7 @@ const ThreadItem = ({thread}) =>{
       <Card onClick={goToReplyPage}>
         <CardBody>
           <CardTitle tag="h5">{thread.title}</CardTitle>
-          <CardText>{thread.description}</CardText>
+          <CardText>{thread.creator}</CardText>
         </CardBody>
       </Card>
     </div>

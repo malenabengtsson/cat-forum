@@ -1,6 +1,10 @@
-import React from 'react'
+import React, {useContext, useState} from 'react'
 import { Card, CardText, CardBody, CardTitle } from "reactstrap";
+import {UserContext} from '../contexts/UserContextProvider'
+import UserInformationModal from './UserInformationModal'
 const ReplyItem = ({reply}) =>{
+    const [modal, setModal] = useState(false);
+    const toggle = () => setModal(!modal);
 
 const getDate = () =>{
   let date = new Date(reply.timestamp)
@@ -22,7 +26,7 @@ const getDate = () =>{
       <Card>
         <CardBody>
           <CardTitle tag="h5">
-            {reply.sender} {getDate()}
+            <p onClick={toggle}>{reply.sender} <UserInformationModal toggle={toggle} modal={modal} setModal={setModal} username={reply.sender}/></p> {getDate()}
           </CardTitle>
           <CardText>{reply.message}</CardText>
         </CardBody>
