@@ -9,6 +9,7 @@ import {
   Input,
 } from "reactstrap";
 import {UserContext} from '../contexts/UserContextProvider'
+import ModeratorButtonStyle from './ModeratorButtonStyle'
 
 const UserInformationModal = (props) => {
   const [clickedUser, setClickedUser] = useState('')
@@ -30,9 +31,9 @@ const UserInformationModal = (props) => {
   }
 
   const getModeratorInformation = async (user) => {
-let moderatedThreads = await fetch('/rest/moderator/' + user.id)
-moderatedThreads = await moderatedThreads.json()
-setModeratedThreads(moderatedThreads)
+let result = await fetch('/rest/moderator/' + user.id)
+result = await result.json()
+setModeratedThreads(result)
 
   }
 
@@ -76,13 +77,12 @@ filteredArray.push(x);
   }, [])
 
   useEffect(() => {
-    console.log(clickedUser);
-    if(clickedUser != null){
-      //Fetch all threads that the user isnt already a moderator for 
+    console.log(moderatedThreads);
+    if(moderatedThreads != null && moderatedThreads !== undefined && moderatedThreads !== ''){
       getAllThreads();
 
     }
-  }, [clickedUser])
+  }, [moderatedThreads])
 
   return (
     <div className="row mx-auto">
@@ -142,9 +142,7 @@ filteredArray.push(x);
               </h6>
               {moderatedThreads &&
                 moderatedThreads.map((x) => (
-                  <Button onClick={() => removeAsModeratorFor(x)}>
-                    {x.title}
-                  </Button>
+                  <ModeratorButtonStyle title={x.title} onClick={() => removeAsModeratorFor(x)}/>
                 ))}
             </div>
           ) : (

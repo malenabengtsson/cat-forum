@@ -9,6 +9,7 @@ import Header from './components/Header'
 import ThreadList from './components/ThreadList'
 import ReplyList from './components/ReplyList'
 import "bootstrap/dist/css/bootstrap.min.css";
+import './sass/styles.scss'
 
 function App() {
   return (
