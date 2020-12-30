@@ -27,7 +27,9 @@ const getSubjects = async (req, res) => {
   res.json(statement.all());
 };
 const getAllThreads = async (req, res) =>{
-  let statement = db.prepare(/*sql*/ `SELECT * FROM threads`)
+  let statement = db.prepare(
+    /*sql*/ `SELECT * FROM threads`
+  );
   res.json(statement.all())
 }
 const getThreads = async (req, res) => {
@@ -126,7 +128,6 @@ const promoteToModerator = async (req, res) => {
      if(permission.granted){
        //check if user is already moderator for chosen thread
        let check = checkIfUserIsModerator(req.params.threadId, req.params.userId)
-
          //make to moderator
           let statement = db.prepare(/*sql*/ `
        INSERT into threadsXmoderatorUsers (threadId, userId) VALUES ($threadId, $userId) `)
