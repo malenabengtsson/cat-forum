@@ -103,8 +103,8 @@ const createReply = async (req, res) => {
 };
 
 const getAllThreadsIfUserIsModerator = async (req, res) =>{
-  console.log(req.params.userId);
-  let query = `SELECT t.* FROM threadsXmoderatorUsers as tXm, threads as t WHERE tXm.userId = ${req.params.userId} AND tXm.threadId = t.id`;
+
+  let query = `SELECT t.* FROM threadsXmoderatorUsers as tXm, threads as t WHERE tXm.userId = ${parseInt(req.params.userId)} AND tXm.threadId = t.id`;
   let statement = db.prepare(query)
   let chosen = statement.all()  
   res.json(chosen);
@@ -127,11 +127,16 @@ const promoteToModerator = async (req, res) => {
 
      if(permission.granted){
        //check if user is already moderator for chosen thread
-       let check = checkIfUserIsModerator(req.params.threadId, req.params.userId)
          //make to moderator
+         console.log('Make moderator');
           let statement = db.prepare(/*sql*/ `
        INSERT into threadsXmoderatorUsers (threadId, userId) VALUES ($threadId, $userId) `)
-       res.json(statement.run({threadId: req.params.threadId, userId: req.params.userId}));
+       res.json(
+         statement.run({
+           threadId: req.params.threadId,
+           userId: parseInt(req.params.userId),
+         })
+       );
        }
      }
 
@@ -143,8 +148,12 @@ const removeModeratorFromThread = async (req, res) => {
 
      console.log(permission.granted);
      if(permission.granted){
-       console.log('before statement');
-       let query = `DELETE FROM threadsXmoderatorUsers WHERE userId = ${req.params.userId} AND threadId = ${req.params.threadId}`;
+       console.log(parseInt(req.params.threadId));
+       console.log(parseInt(req.params.userId));
+       console.log('In remove');
+       let query = `DELETE FROM threadsXmoderatorUsers WHERE userId = ${parseInt(
+         req.params.userId
+       )} AND threadId = ${parseInt(req.params.threadId)}`;
        let statement = db.prepare(query);
        let result = statement.run();
        console.log(result);

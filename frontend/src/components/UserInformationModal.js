@@ -20,7 +20,6 @@ const UserInformationModal = (props) => {
   const [unModeratedThreads, setUnModeratedThreads] = useState('');
 
   const fetchUserByUsername = async () =>{
-    console.log(props.username);
     let result = await fetch('/rest/' + props.username);
     result = await result.json();
     setClickedUser(result)
@@ -31,29 +30,30 @@ const UserInformationModal = (props) => {
   }
 
   const getModeratorInformation = async (user) => {
+    console.log('In get info');
 let result = await fetch('/rest/moderator/' + user.id)
 result = await result.json()
 setModeratedThreads(result)
+console.log(result);
 
   }
 
   const getAllThreads = async () =>{
-    console.log(clickedUser.id);
     let result = await fetch('/rest/threads')
     result = await result.json()
+
+ for (let i = 0; i < moderatedThreads.length; i++) {
+   for (let j = 0; j < result.length; j++) {
+     if(result[j].id === moderatedThreads[i].id){
+       console.log('In if');
+       result.splice(j, 1)
+     }
+   }
+ }
+
+
 console.log(result);
-let filteredArray = []
-result = result.map(x =>{
-  moderatedThreads.map(y =>{
-    if(x.title === y.title){
-     console.log(x);
-    }
-    else{
-filteredArray.push(x);
-    }
-  })
-})
-    setUnModeratedThreads(filteredArray);
+    setUnModeratedThreads(result);
 
   }
 
@@ -61,15 +61,17 @@ filteredArray.push(x);
     let result = await fetch(
       "/rest/removeModerator/" + clickedUser.id + "/" + thread.id
     );
-    getModeratorInformation()
+    result = await result.json()
+    getModeratorInformation(clickedUser)
     console.log(moderatedThreads);
   }
 
   const addAsModerator = async (thread) =>{
+    console.log('in function');
  let result = await fetch(
    "/rest/addModerator/" + clickedUser.id + "/" + thread.id
  );
- getModeratorInformation()
+ getModeratorInformation(clickedUser)
   }
 
   useEffect(() => {
@@ -77,7 +79,6 @@ filteredArray.push(x);
   }, [])
 
   useEffect(() => {
-    console.log(moderatedThreads);
     if(moderatedThreads != null && moderatedThreads !== undefined && moderatedThreads !== ''){
       getAllThreads();
 
@@ -140,10 +141,16 @@ filteredArray.push(x);
                 Click on the thread to remove {clickedUser.username} as a
                 moderator
               </h6>
+              
               {moderatedThreads &&
                 moderatedThreads.map((x) => (
-                  <ModeratorButtonStyle title={x.title} onClick={() => removeAsModeratorFor(x)}/>
+                  <div onClick={() => removeAsModeratorFor(x)}>
+                    <ModeratorButtonStyle
+                      thread={x}
+                    />
+                  </div>
                 ))}
+  
             </div>
           ) : (
             ""
@@ -151,14 +158,15 @@ filteredArray.push(x);
           {showAddModeratorInformation ? (
             <div>
               <h6>
-                Click on the thread to add {clickedUser.username} as a
-                moderator
+                Click on the thread to add {clickedUser.username} as a moderator
               </h6>
               {unModeratedThreads &&
                 unModeratedThreads.map((x) => (
-                  <Button onClick={() => addAsModerator(x)}>
-                    {x.title}
-                  </Button>
+                  <div onClick={() => addAsModerator(x)}>
+                    <ModeratorButtonStyle
+                      thread={x}
+                    />
+                  </div>
                 ))}
             </div>
           ) : (
