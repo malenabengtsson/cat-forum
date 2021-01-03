@@ -26,7 +26,7 @@ const getDate = () =>{
       <Card>
         <CardBody>
           <CardTitle tag="h5">
-            <p onClick={toggle}>{reply.sender} <UserInformationModal toggle={toggle} modal={modal} setModal={setModal} username={reply.sender}/></p> {getDate()}
+            <span className="pointer" onClick={toggle}>{reply.sender} <UserInformationModal toggle={toggle} modal={modal} setModal={setModal} username={reply.sender}/></span> {getDate()}
           </CardTitle>
           <CardText>{reply.message}</CardText>
         </CardBody>

@@ -13,7 +13,7 @@ const ThreadItem = ({thread}) =>{
   }
 
   return (
-    <div className="m-4">
+    <div className="m-4 pointer">
       <Card onClick={goToReplyPage}>
         <CardBody>
           <CardTitle tag="h5">{thread.title}</CardTitle>

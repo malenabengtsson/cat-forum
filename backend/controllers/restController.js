@@ -110,15 +110,38 @@ const getAllThreadsIfUserIsModerator = async (req, res) =>{
   res.json(chosen);
 }
 
+const checkIfUserIsModerator =  (userId) => {
+  let query = `
+  SELECT * FROM threadsXmoderatorUsers as tXm, threads as t WHERE tXm.userId = ${userId} AND tXm.threadId = t.id`;
+  let statement = db.prepare(/*sql*/ query);
+  let result = statement.all();
 
-const checkIfUserIsModerator = async (threadId, userId) => {
-  let statement = db.prepare(/*sql*/ `
-  SELECT * FROM threadsXmoderatorUsers WHERE threadId = $threadId AND userId = $userId`);
-  let result = statement.all({threadId: threadId, userId: userId})
-  console.log(result);
-  return false;
+ console.log(result.length);
+  if (result.length > 0){
+    return true;
+  }
+  else{
+    console.log('empty');
+    return false;
+  }
+};
+
+const demoteToBasicUser = (userId) => {
+  console.log('In demote ');
+  let statement = db.prepare(/*sql*/`UPDATE users SET roleId = 1 WHERE id 
+  = ${userId}`);
+  statement.run()
 
 }
+
+const promoteToModeratorRole = (userId) =>{
+console.log('in promote');
+ let statement = db.prepare(/*sql*/ `UPDATE users SET roleId = 2 WHERE id 
+  = ${userId}`);
+ statement.run();
+
+}
+
 
 const promoteToModerator = async (req, res) => {
    const permission = ac
@@ -126,14 +149,17 @@ const promoteToModerator = async (req, res) => {
      .updateAny("userOrModerator");
 
      if(permission.granted){
-       //check if user is already moderator for chosen thread
-         //make to moderator
          console.log('Make moderator');
+         let check = checkIfUserIsModerator(parseInt(req.params.userId));
+         console.log(check);
+         if(!check){
+           promoteToModeratorRole(parseInt(req.params.userId));
+         }
           let statement = db.prepare(/*sql*/ `
        INSERT into threadsXmoderatorUsers (threadId, userId) VALUES ($threadId, $userId) `)
        res.json(
          statement.run({
-           threadId: req.params.threadId,
+           threadId: parseInt(req.params.threadId),
            userId: parseInt(req.params.userId),
          })
        );
@@ -148,19 +174,25 @@ const removeModeratorFromThread = async (req, res) => {
 
      console.log(permission.granted);
      if(permission.granted){
-       console.log(parseInt(req.params.threadId));
-       console.log(parseInt(req.params.userId));
-       console.log('In remove');
        let query = `DELETE FROM threadsXmoderatorUsers WHERE userId = ${parseInt(
          req.params.userId
        )} AND threadId = ${parseInt(req.params.threadId)}`;
        let statement = db.prepare(query);
        let result = statement.run();
-       console.log(result);
+     
+       let check = checkIfUserIsModerator(
+         parseInt(req.params.userId)
+       );
+       if(!check){
+         demoteToBasicUser(parseInt(req.params.userId))
+       }
        res.json(result)
        
      }
 }
+
+
+
 
 module.exports = {
   getSubjects,

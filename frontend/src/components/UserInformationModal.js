@@ -20,17 +20,18 @@ const UserInformationModal = (props) => {
   const [unModeratedThreads, setUnModeratedThreads] = useState('');
 
   const fetchUserByUsername = async () =>{
+    if(showRemoveModeratorInformation){
+      setShowRemoveModeratorInformation(false)
+    }
     let result = await fetch('/rest/' + props.username);
     result = await result.json();
     setClickedUser(result)
 
-    if(result.userRole === 'moderator'){
       getModeratorInformation(result)
-    }
+    
   }
 
   const getModeratorInformation = async (user) => {
-    console.log('In get info');
 let result = await fetch('/rest/moderator/' + user.id)
 result = await result.json()
 setModeratedThreads(result)
@@ -45,14 +46,11 @@ console.log(result);
  for (let i = 0; i < moderatedThreads.length; i++) {
    for (let j = 0; j < result.length; j++) {
      if(result[j].id === moderatedThreads[i].id){
-       console.log('In if');
        result.splice(j, 1)
      }
    }
  }
 
-
-console.log(result);
     setUnModeratedThreads(result);
 
   }
@@ -62,8 +60,7 @@ console.log(result);
       "/rest/removeModerator/" + clickedUser.id + "/" + thread.id
     );
     result = await result.json()
-    getModeratorInformation(clickedUser)
-    console.log(moderatedThreads);
+   fetchUserByUsername()
   }
 
   const addAsModerator = async (thread) =>{
@@ -71,7 +68,8 @@ console.log(result);
  let result = await fetch(
    "/rest/addModerator/" + clickedUser.id + "/" + thread.id
  );
- getModeratorInformation(clickedUser)
+fetchUserByUsername();
+
   }
 
   useEffect(() => {
@@ -92,16 +90,15 @@ console.log(result);
           {clickedUser ? clickedUser.username : "Nothing here"}{" "}
         </h2>
         <ModalBody className="">
-          {clickedUser && clickedUser.userRole === "moderator" ? (
+          {clickedUser ? (
             <div>
-              <p className="m-2">
-                {clickedUser.username} is moderator for following threads:
-              </p>
               {moderatedThreads &&
-                moderatedThreads.map((x) => <p className="m-2">{x.title}</p>)}
+                moderatedThreads.map((x) => (
+                  <ModeratorButtonStyle thread={x} title={"MODERATOR"} />
+                ))}
             </div>
           ) : (
-            <p>{clickedUser.username} is not a moderator for any threads</p>
+          ''
           )}
           {user && user.userRole === "admin" ? (
             clickedUser && clickedUser.userRole === "moderator" ? (
@@ -141,16 +138,13 @@ console.log(result);
                 Click on the thread to remove {clickedUser.username} as a
                 moderator
               </h6>
-              
+
               {moderatedThreads &&
                 moderatedThreads.map((x) => (
                   <div onClick={() => removeAsModeratorFor(x)}>
-                    <ModeratorButtonStyle
-                      thread={x}
-                    />
+                    <ModeratorButtonStyle thread={x} title={"REMOVE"} />
                   </div>
                 ))}
-  
             </div>
           ) : (
             ""
@@ -163,9 +157,7 @@ console.log(result);
               {unModeratedThreads &&
                 unModeratedThreads.map((x) => (
                   <div onClick={() => addAsModerator(x)}>
-                    <ModeratorButtonStyle
-                      thread={x}
-                    />
+                    <ModeratorButtonStyle thread={x} title={'ADD'} />
                   </div>
                 ))}
             </div>

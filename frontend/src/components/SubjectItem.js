@@ -17,7 +17,7 @@ const SubjectItem = ({subject}) =>{
   }
 
   return (
-    <div className="m-4">
+    <div className="m-4 pointer">
       <Card onClick={() => goToSubject()}>
         <CardBody>
           <CardTitle tag="h5">{subject.title}</CardTitle>
