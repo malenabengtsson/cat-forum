@@ -50,7 +50,6 @@ console.log(result);
      }
    }
  }
-
     setUnModeratedThreads(result);
 
   }

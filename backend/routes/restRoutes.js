@@ -12,6 +12,8 @@ router.get('/:username', restController.getUserByUsername)
 router.get('/moderator/:userId', restController.getAllThreadsIfUserIsModerator)
 router.get("/removeModerator/:userId/:threadId", restController.removeModeratorFromThread);
 router.get("/addModerator/:userId/:threadId", restController.promoteToModerator);
+router.get("/lockThread/:threadId", restController.lockThread)
+router.get('/deleteReply/:replyId', restController.deleteReply)
 
 
 module.exports = router;

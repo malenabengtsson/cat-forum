@@ -11,11 +11,15 @@ import {
 import { useHistory } from "react-router-dom";
 import {UserContext} from '../contexts/UserContextProvider'
 import AuthenticationModal from './AuthenticationModals/AuthenticationModal'
+import UserInformationModal from './UserInformationModal'
+const catLogo = require('../images/catforum.png')
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [modalIsOpen, setModalIsOpen] = useState(false);
      const { user, setUser } = useContext(UserContext);
+     const [userModal, setUserModal] = useState(false);
+     const Usertoggle = () => setUserModal(!userModal);
 
   let history = useHistory();
   const toggle = () => setIsOpen(!isOpen);
@@ -41,7 +45,7 @@ const Header = () => {
     <div>
       <Navbar color="light" light expand="md">
         <NavbarBrand onClick={goToHomePage} className="pointer">
-          Cat forum
+          Catforum
         </NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
@@ -49,15 +53,12 @@ const Header = () => {
             {user === null ? (
               <>
                 <NavItem>
-                  <NavLink
-                    className="pointer"
-                    onClick={toggleModal}
-                  >
+                  <NavLink className="pointer" onClick={toggleModal}>
                     Logga in
                   </NavLink>
                   <AuthenticationModal
                     modalIsOpen={modalIsOpen}
-                    toggleModal={toggleModal}
+                    toggleModal={toggle}
                     setModalIsOpen={setModalIsOpen}
                   />
                 </NavItem>
@@ -65,12 +66,15 @@ const Header = () => {
             ) : (
               <>
                 <NavItem className="">
-                  <NavLink
-                    className="pointer"
-                    onClick={goToMyPage}
-                  >
+                  <NavLink className="pointer" onClick={Usertoggle}>
                     Min sida
                   </NavLink>
+                  <UserInformationModal
+                    toggle={Usertoggle}
+                    modal={userModal}
+                    setModal={setUserModal}
+                    username={user.username}
+                  />
                 </NavItem>
                 <NavItem className="">
                   <NavLink className="pointer" onClick={logout}>

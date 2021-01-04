@@ -4,6 +4,8 @@ import { useHistory } from "react-router-dom";
 import {SubjectContext} from '../contexts/SubjectContextProvider'
 const ThreadItem = ({thread}) =>{
   const {setChosenThread, chosenSubject} = useContext(SubjectContext)
+ 
+
   let history = useHistory();
 
   const goToReplyPage = () =>{

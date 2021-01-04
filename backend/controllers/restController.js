@@ -102,19 +102,31 @@ const createReply = async (req, res) => {
   }
 };
 
-const getAllThreadsIfUserIsModerator = async (req, res) =>{
+const deleteReply = async (req, res) =>{
+  let statement = db.prepare(/*sql*/ `
+  DELETE FROM replies WHERE id = $replyId`)
 
-  let query = `SELECT t.* FROM threadsXmoderatorUsers as tXm, threads as t WHERE tXm.userId = ${parseInt(req.params.userId)} AND tXm.threadId = t.id`;
-  let statement = db.prepare(query)
-  let chosen = statement.all()  
-  res.json(chosen);
+  res.json(statement.run({replyId: req.params.replyId}))
+}
+
+const lockThread = async (req, res) =>{
+  let statement = db.prepare(/*sql*/`
+  UPDATE threads SET locked = 1 WHERE id = $threadId`)
+  res.json(statement.run({threadId : req.params.threadId}))
+}
+
+const getAllThreadsIfUserIsModerator = async (req, res) => {
+  let statement = db.prepare(
+    /*sql*/ `SELECT t.* FROM threadsXmoderatorUsers as tXm, threads as t WHERE tXm.userId = $userId AND tXm.threadId = t.id`
+  );
+  let result = statement.all({userId: parseInt(req.params.userId)})  
+  res.json(result);
 }
 
 const checkIfUserIsModerator =  (userId) => {
-  let query = `
-  SELECT * FROM threadsXmoderatorUsers as tXm, threads as t WHERE tXm.userId = ${userId} AND tXm.threadId = t.id`;
-  let statement = db.prepare(/*sql*/ query);
-  let result = statement.all();
+  let statement = db.prepare(/*sql*/ `
+  SELECT * FROM threadsXmoderatorUsers as tXm, threads as t WHERE tXm.userId = $userId AND tXm.threadId = t.id`);
+  let result = statement.all({userId: userId});
 
  console.log(result.length);
   if (result.length > 0){
@@ -172,13 +184,14 @@ const removeModeratorFromThread = async (req, res) => {
    const permission = ac.can(req.session.user.userRole)
      .updateAny("userOrModerator");
 
-     console.log(permission.granted);
      if(permission.granted){
-       let query = `DELETE FROM threadsXmoderatorUsers WHERE userId = ${parseInt(
-         req.params.userId
-       )} AND threadId = ${parseInt(req.params.threadId)}`;
-       let statement = db.prepare(query);
-       let result = statement.run();
+       let statement = db.prepare(
+         /*sql*/ `DELETE FROM threadsXmoderatorUsers WHERE userId = $userId AND threadId = $threadId`
+       );
+       let result = statement.run({
+         userId: parseInt(req.params.userId),
+         threadId: parseInt(req.params.threadId),
+       });
      
        let check = checkIfUserIsModerator(
          parseInt(req.params.userId)
@@ -191,9 +204,6 @@ const removeModeratorFromThread = async (req, res) => {
      }
 }
 
-
-
-
 module.exports = {
   getSubjects,
   getThreads,
@@ -205,4 +215,6 @@ module.exports = {
   createReply,
   promoteToModerator,
   removeModeratorFromThread,
+  lockThread,
+  deleteReply,
 };
