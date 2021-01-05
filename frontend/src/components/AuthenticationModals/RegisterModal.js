@@ -16,7 +16,7 @@ const RegisterModal = (props) => {
       email: email,
       username: username,
       password: password,
-      roleId: 3    
+      roleId: 1    
     };
 
     let response = await fetch("/auth/register", {

@@ -109,6 +109,15 @@ const deleteReply = async (req, res) =>{
   res.json(statement.run({replyId: req.params.replyId}))
 }
 
+const deleteUser = (req, res) =>{
+ let deleteStatement = db.prepare(/*sql*/`DELETE FROM users WHERE id=$userId`)
+ let deleteModeratorConnections = db.prepare(
+   /*sql*/ `DELETE FROM threadsXmoderatorUsers WHERE userId = $userId`
+ );
+ deleteModeratorConnections.run({userId: parseInt(req.params.userId)})
+ res.json(deleteStatement.run({ userId: parseInt(req.params.userId) }));
+}
+
 const lockThread = async (req, res) =>{
   let statement = db.prepare(/*sql*/`
   UPDATE threads SET locked = 1 WHERE id = $threadId`)
@@ -127,8 +136,6 @@ const checkIfUserIsModerator =  (userId) => {
   let statement = db.prepare(/*sql*/ `
   SELECT * FROM threadsXmoderatorUsers as tXm, threads as t WHERE tXm.userId = $userId AND tXm.threadId = t.id`);
   let result = statement.all({userId: userId});
-
- console.log(result.length);
   if (result.length > 0){
     return true;
   }
@@ -217,4 +224,5 @@ module.exports = {
   removeModeratorFromThread,
   lockThread,
   deleteReply,
+  deleteUser,
 };

@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react'
-import { Card, CardText, CardBody, CardTitle, CardFooter } from "reactstrap";
+import { Alert, Card, CardText, CardBody, CardTitle, CardFooter } from "reactstrap";
 import {UserContext} from '../contexts/UserContextProvider'
 import UserInformationModal from './UserInformationModal'
 const ReplyItem = ({reply, isModerator, fetchReplies}) =>{
@@ -31,31 +31,70 @@ fetchReplies();
 }
   return (
     <div className="m-4">
-      <Card>
-        <CardBody>
-          <CardTitle tag="h5">
-            <span className="pointer" onClick={toggle}>
-              {reply.sender}{" "}
-              <UserInformationModal
-                toggle={toggle}
-                modal={modal}
-                setModal={setModal}
-                username={reply.sender}
-              />
-            </span>{" "}
-            {getDate()}
-          </CardTitle>
-          <CardText>{reply.message}</CardText>
-        </CardBody>
-        { user ? isModerator || user.userRole === "admin" ? 
-        <CardFooter className="text-muted">
-          <p className="m-0 pointer" onClick={() => deleteReply()}>
-            Delete reply
-          </p>
-        </CardFooter> : '' : ''
-        }
-        
-      </Card>
+      {reply.warning === 0 ? (
+        <Card>
+          <CardBody>
+            <CardTitle>
+              <span className="pointer" onClick={toggle}>
+                {reply.sender} {getDate()}
+                <UserInformationModal
+                  toggle={toggle}
+                  modal={modal}
+                  setModal={setModal}
+                  username={reply.sender}
+                />
+              </span>{" "}
+            </CardTitle>
+            <CardText>{reply.message}</CardText>
+          </CardBody>
+          {user ? (
+            isModerator || user.userRole === "admin" ? (
+              <CardFooter className="text-muted">
+                <p className="m-0 pointer" onClick={() => deleteReply()}>
+                  Delete reply
+                </p>
+              </CardFooter>
+            ) : (
+              ""
+            )
+          ) : (
+            ""
+          )}
+        </Card>
+      ) : (
+        <Alert color="danger">
+          <Card>
+            <CardBody>
+              <CardTitle tag="h5">
+                <span className="pointer" onClick={toggle}>
+                  {reply.sender}{" "}
+                  <UserInformationModal
+                    toggle={toggle}
+                    modal={modal}
+                    setModal={setModal}
+                    username={reply.sender}
+                  />
+                </span>{" "}
+                {getDate()}
+              </CardTitle>
+              <CardText>{reply.message}</CardText>
+            </CardBody>
+            {user ? (
+              isModerator || user.userRole === "admin" ? (
+                <CardFooter className="text-muted">
+                  <p className="m-0 pointer" onClick={() => deleteReply()}>
+                    Delete reply
+                  </p>
+                </CardFooter>
+              ) : (
+                ""
+              )
+            ) : (
+              ""
+            )}
+          </Card>
+        </Alert>
+      )}
     </div>
   );
 }

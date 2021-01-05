@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react'
 import {
+  Alert,
   Button,
   Form,
   FormGroup,
@@ -17,10 +18,11 @@ import ReplyItem from './ReplyItem'
 const ReplyList = () =>{
   const [replies, setReplies] = useState(null)
   const [newReply, setNewReply] = useState('')
+  const [threadIsLocked, setThreadIsLocked] = useState(false);
+  const [warningReply, setWarningReply] = useState(false)
   const {chosenThread} = useContext(SubjectContext);
   const {user} = useContext(UserContext);
   const [isModerator, setIsModerator] = useState('')
-   const [threadIsLocked, setThreadIsLocked] = useState(false);
 
   const fetchReplies = async () =>{
     let result = await fetch('/rest/replies/' + chosenThread.id)
@@ -37,6 +39,7 @@ e.preventDefault()
  let replyInformation = {
    message: newReply,
    sender: user.username,
+   warning: warningReply ? 1 : 0
  };
                
   let reply = await fetch("/rest/replies/" + chosenThread.id, {
@@ -57,13 +60,17 @@ result.map((thread, i) => {
     setIsModerator(true)
   }
 })
-
 }
 
 const lockThread = async () => {
   console.log('In lock');
   await fetch('/rest//lockThread/' + chosenThread.id)
   setThreadIsLocked(true);
+}
+
+const toggleWarningReply = () => {
+setWarningReply(!warningReply)
+console.log(warningReply);
 }
 
   useEffect(() => {
@@ -83,7 +90,8 @@ const lockThread = async () => {
               reply={reply}
               key={i}
               isModerator={isModerator}
-              fetchReplies={fetchReplies} />
+              fetchReplies={fetchReplies}
+              warningReply={warningReply} />
           );
         })}
       {user ? (
@@ -111,6 +119,7 @@ const lockThread = async () => {
                   <p className="m-0 pointer" onClick={() => lockThread()}>
                     Lock thread
                   </p>
+                  <Button onClick={() => toggleWarningReply() } active={warningReply}>Warning</Button>
                 </CardFooter>
               ) : (
                 ""
@@ -118,7 +127,7 @@ const lockThread = async () => {
             </Card>
           </div>
         ) : (
-          <h6>Thread has been locked</h6>
+          <Alert color="danger">Thread has been locked</Alert>
         )
       ) : (
         ""

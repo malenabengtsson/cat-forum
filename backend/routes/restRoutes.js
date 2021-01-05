@@ -14,6 +14,7 @@ router.get("/removeModerator/:userId/:threadId", restController.removeModeratorF
 router.get("/addModerator/:userId/:threadId", restController.promoteToModerator);
 router.get("/lockThread/:threadId", restController.lockThread)
 router.get('/deleteReply/:replyId', restController.deleteReply)
+router.get('/deleteUser/:userId', restController.deleteUser)
 
 
 module.exports = router;

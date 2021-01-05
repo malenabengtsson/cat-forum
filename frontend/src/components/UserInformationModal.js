@@ -7,6 +7,7 @@ import {
   FormGroup,
   Label,
   Input,
+  ModalFooter
 } from "reactstrap";
 import {UserContext} from '../contexts/UserContextProvider'
 import ModeratorButtonStyle from './ModeratorButtonStyle'
@@ -25,9 +26,15 @@ const UserInformationModal = (props) => {
     }
     let result = await fetch('/rest/' + props.username);
     result = await result.json();
-    setClickedUser(result)
+    console.log(result);
 
+    if(result != null){
+      setClickedUser(result)
       getModeratorInformation(result)
+    }
+    else{
+      setClickedUser(null)
+    }
     
   }
 
@@ -71,6 +78,12 @@ fetchUserByUsername();
 
   }
 
+  const removeUser = async () =>{
+    console.log('in delete');
+    let result = await fetch('/rest/deleteUser/' + clickedUser.id)
+    fetchUserByUsername()
+  }
+
   useEffect(() => {
     fetchUserByUsername()
   }, [])
@@ -86,7 +99,7 @@ fetchUserByUsername();
     <div className="row mx-auto">
       <Modal isOpen={props.modal} toggle={props.toggle}>
         <h2 className="text-center mt-4 tradeHub-orange font-weight-bold col-12">
-          {clickedUser ? clickedUser.username : "Nothing here"}{" "}
+          {clickedUser ? clickedUser.username : "User have been deleted"}{" "}
         </h2>
         <ModalBody className="">
           {clickedUser ? (
@@ -97,20 +110,33 @@ fetchUserByUsername();
                 ))}
             </div>
           ) : (
-          ''
+            ""
           )}
-          {user && user.userRole === "admin" ? (
-            clickedUser && clickedUser.userRole === "moderator" ? (
-              <div>
-                <Button
-                  onClick={() =>
-                    setShowRemoveModeratorInformation(
-                      !showRemoveModeratorInformation
-                    )
-                  }
-                >
-                  Remove as moderator
-                </Button>{" "}
+          {user && user.userRole === "admin" && clickedUser != null ? (
+            <div>
+              <Button onClick={() => removeUser()}>Remove user</Button>
+              {clickedUser && clickedUser.userRole === "moderator" ? (
+                <div>
+                  <Button
+                    onClick={() =>
+                      setShowRemoveModeratorInformation(
+                        !showRemoveModeratorInformation
+                      )
+                    }
+                  >
+                    Remove as moderator
+                  </Button>{" "}
+                  <Button
+                    onClick={() =>
+                      setShowAddModeratorInformation(
+                        !showAddModeratorInformation
+                      )
+                    }
+                  >
+                    Add as moderator
+                  </Button>
+                </div>
+              ) : (
                 <Button
                   onClick={() =>
                     setShowAddModeratorInformation(!showAddModeratorInformation)
@@ -118,16 +144,8 @@ fetchUserByUsername();
                 >
                   Add as moderator
                 </Button>
-              </div>
-            ) : (
-              <Button
-                onClick={() =>
-                  setShowAddModeratorInformation(!showAddModeratorInformation)
-                }
-              >
-                Add as moderator
-              </Button>
-            )
+              )}
+            </div>
           ) : (
             ""
           )}
@@ -156,7 +174,7 @@ fetchUserByUsername();
               {unModeratedThreads &&
                 unModeratedThreads.map((x) => (
                   <div onClick={() => addAsModerator(x)}>
-                    <ModeratorButtonStyle thread={x} title={'ADD'} />
+                    <ModeratorButtonStyle thread={x} title={"ADD"} />
                   </div>
                 ))}
             </div>

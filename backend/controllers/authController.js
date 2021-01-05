@@ -1,6 +1,8 @@
 const sqlite3 = require("better-sqlite3");
 const db = sqlite3("../cat-forum.db");
 const Encrypt = require('../Security/Encrypt')
+const AccessControl = require("accesscontrol");
+const ac = new AccessControl();
 
 const register = async (req, res) =>{
   console.log('In register');
