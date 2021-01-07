@@ -3,11 +3,6 @@ import {
   Button,
   Modal,
   ModalBody,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  ModalFooter
 } from "reactstrap";
 import {UserContext} from '../contexts/UserContextProvider'
 import ModeratorButtonStyle from './ModeratorButtonStyle'

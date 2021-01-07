@@ -8,6 +8,7 @@ const LoginModal = (props) => {
   const [errorMessageShown, setErrorMessageShown] = useState(false);
   const { setUser, fetchUser } = useContext(UserContext);
 
+
   const performLogin = async (e) => {
     console.log('In login method in frontend');
     e.preventDefault();
@@ -18,29 +19,33 @@ const LoginModal = (props) => {
     }
     console.log(credentials);
 
-    await fetch("/auth/login", {
+   let result = await fetch("/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(credentials),
     });
 
+    result = await result.json()
+   console.log(result);
+    if(result != null){
       fetchUser();
       setErrorMessageShown(false);
       props.setModalIsOpen(!props.modalIsOpen);
+      setErrorMessageShown(false)
+    }
+    else{
+      setErrorMessageShown(true)
+
+    }
     
   };
   return (
     <div className="row mx-auto authentication-modals">
-      <h2 className="text-center mt-4 font-weight-bold col-12">
-        Logga in
-      </h2>
+      <h2 className="text-center mt-4 font-weight-bold col-12">Logga in</h2>
       <ModalBody className="">
         <Form onSubmit={performLogin}>
           <FormGroup className="col-xs-8 col-sm-12 col-md-12 col-lg-12 m-0">
-            <Label
-              for="emailAddress"
-              className=" font-weight-bold"
-            >
+            <Label for="emailAddress" className=" font-weight-bold">
               Email
             </Label>
             <Input
@@ -53,7 +58,9 @@ const LoginModal = (props) => {
             />
           </FormGroup>
           <FormGroup className="col-xs-8 col-sm-12 col-md-12 col-lg-12 mt-2">
-            <Label for="password">Password</Label>
+            <Label className="font-weight-bold" for="password">
+              Password
+            </Label>
             <Input
               required
               className=""
@@ -66,7 +73,7 @@ const LoginModal = (props) => {
           <FormGroup className="col-xs-8 col-sm-12 col-md-12 col-lg-12 mt-2">
             {errorMessageShown ? (
               <div className="error-text mb-2 text-center font-weight-bold">
-                Felaktigt användarnamn eller lösenord{" "}
+                Wrong username or password{" "}
               </div>
             ) : (
               ""
@@ -82,7 +89,10 @@ const LoginModal = (props) => {
             {" "}
             Skapa konto{" "}
             <span className="text-primary inline pointer">
-              <span className="pointer" onClick={() => props.setIsRegistered(!props.isRegistered)}>
+              <span
+                className="pointer"
+                onClick={() => props.setIsRegistered(!props.isRegistered)}
+              >
                 här
               </span>
             </span>

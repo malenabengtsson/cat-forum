@@ -18,7 +18,8 @@ const CreateNewThreadModal = (props) => {
 
    let replyInformation = {
       message: message,
-      sender: user.username
+      sender: user.username,
+      warning: 0
     }
 
    let thread = await fetch("/rest/threads/" + chosenSubject.id, {

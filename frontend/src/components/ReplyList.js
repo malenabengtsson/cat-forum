@@ -24,6 +24,7 @@ const ReplyList = () =>{
   const {user} = useContext(UserContext);
   const [isModerator, setIsModerator] = useState('')
 
+  console.log('Warning', warningReply);
   const fetchReplies = async () =>{
     let result = await fetch('/rest/replies/' + chosenThread.id)
     result = await result.json();
@@ -39,7 +40,7 @@ e.preventDefault()
  let replyInformation = {
    message: newReply,
    sender: user.username,
-   warning: warningReply ? 1 : 0
+   warning: warningReply === true ? 1 : 0
  };
                
   let reply = await fetch("/rest/replies/" + chosenThread.id, {
@@ -64,13 +65,12 @@ result.map((thread, i) => {
 
 const lockThread = async () => {
   console.log('In lock');
-  await fetch('/rest//lockThread/' + chosenThread.id)
+  await fetch('/rest/lockThread/' + chosenThread.id)
   setThreadIsLocked(true);
 }
 
 const toggleWarningReply = () => {
 setWarningReply(!warningReply)
-console.log(warningReply);
 }
 
   useEffect(() => {
@@ -78,11 +78,17 @@ console.log(warningReply);
  if(user != null){
     isLoggedInUserModeratorForThread()
   }
+
+  return () =>{
+    console.log('in return');
+    setWarningReply(false)
+    console.log(warningReply);
+  }
   }, [])
 
   return (
     <div>
-      <h2>{chosenThread.title}</h2>
+      <h2 className="m-4">{chosenThread.title}</h2>
       {replies &&
         replies.map((reply, i) => {
           return (
@@ -91,14 +97,15 @@ console.log(warningReply);
               key={i}
               isModerator={isModerator}
               fetchReplies={fetchReplies}
-              warningReply={warningReply} />
+              warningReply={warningReply}
+            />
           );
         })}
       {user ? (
         chosenThread && threadIsLocked === false ? (
           <div className="m-4">
-            <Card>
-              <CardBody>
+            <Card className="bgc-sand">
+              <CardBody className="bgc-sand">
                 <CardTitle tag="h5">Write a reply</CardTitle>
                 <CardText>
                   <Form onSubmit={sendReply}>
@@ -108,18 +115,27 @@ console.log(warningReply);
                         placeholder="Write your reply here..."
                         value={newReply}
                         onChange={(e) => setNewReply(e.target.value)}
+                        required
                       />
                     </FormGroup>
-                    <Button>Send reply</Button>
+                    <Button className="bgc-yellow button-style">
+                      Send reply
+                    </Button>
                   </Form>
                 </CardText>
               </CardBody>
-              {isModerator || user.userRole === 'admin' && threadIsLocked === false ? (
+              {isModerator ||
+              (user.userRole === "admin" && threadIsLocked === false) ? (
                 <CardFooter className="text-muted">
                   <p className="m-0 pointer" onClick={() => lockThread()}>
                     Lock thread
                   </p>
-                  <Button onClick={() => toggleWarningReply() } active={warningReply}>Warning</Button>
+                  <Button
+                    onClick={() => toggleWarningReply()}
+                    active={warningReply}
+                  >
+                    Warning
+                  </Button>
                 </CardFooter>
               ) : (
                 ""

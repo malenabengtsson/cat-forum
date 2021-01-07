@@ -41,7 +41,7 @@ const Header = () => {
   return (
     <div>
       <Navbar color="light" light expand="md">
-        <NavbarBrand className="pointer">
+        <NavbarBrand onClick={goToHomePage} className="pointer">
           <img src={catLogo}
           />
         </NavbarBrand>

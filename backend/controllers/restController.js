@@ -88,7 +88,7 @@ const createThread = async (req, res) => {
 const createReply = async (req, res) => {
   const permission = ac.can(req.session.user.userRole).createOwn("thread");
   if (permission.granted) {
-    let statement = db.prepare(/*sql*/ `INSERT INTO replies (message, threadId, timestamp, sender) VALUES ($message, $threadId, $timestamp, $sender)
+    let statement = db.prepare(/*sql*/ `INSERT INTO replies (message, threadId, timestamp, sender, warning) VALUES ($message, $threadId, $timestamp, $sender, $warning)
    `);
 
     res.json(
@@ -97,6 +97,7 @@ const createReply = async (req, res) => {
         threadId: req.params.threadId,
         timestamp: Date.now(),
         sender: req.body.sender,
+        warning: req.body.warning
       })
     );
   }

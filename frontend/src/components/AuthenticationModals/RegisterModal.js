@@ -6,7 +6,7 @@ const RegisterModal = (props) => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessageShown, setErrorMessageShown] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
      const { fetchUser } = useContext(UserContext);
 
   const performRegistration = async (e) => {
@@ -25,14 +25,28 @@ const RegisterModal = (props) => {
       body: JSON.stringify(userInformation),
     });
 
-    if (response.status === 400) {
-      setErrorMessageShown(true);
-    } else {
-      setErrorMessageShown(false);
+    console.log(response);
+    response = await response.json()
+    console.log(response.error);
+  
+    
+
+    if (response.error === 'username') {
+      setErrorMessage('The username is already taken');
+    } else if(response.error === 'email') {
+         setErrorMessage("The email has already been registered");
+    }
+    else if(response.error === 'username email'){
+         setErrorMessage('Email is already registered and username is already taken');
+
+    }
+    else{
+      console.log('in else');
+      setErrorMessage(null);
       fetchUser();
       props.setModalIsOpen(!props.modalIsOpen);
     }
-  };
+    };
   return (
     <div className="mx-auto authentication-modals">
       <h2 className="mt-4 text-center font-weight-bold col-sm-12 col-lg-12">
@@ -67,10 +81,11 @@ const RegisterModal = (props) => {
             />
           </FormGroup>
           <FormGroup className="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-            <Label for="password">Password</Label>
+            <Label className="font-weight-bold" for="password">
+              Password
+            </Label>
             <Input
               required
-              className=""
               type="password"
               placeholder="Password"
               value={password}
@@ -78,9 +93,9 @@ const RegisterModal = (props) => {
             />{" "}
           </FormGroup>
           <FormGroup className="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-            {errorMessageShown ? (
+            {errorMessage !== null ? (
               <div className="error-text mb-2 text-center font-weight-bold">
-                Det finns redan ett konto med den emailadressen
+                {errorMessage}
               </div>
             ) : (
               <Label for="password" className="text-white font-weight-bold">

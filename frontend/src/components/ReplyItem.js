@@ -17,8 +17,6 @@ const getDate = () =>{
      yearMonthAndDay + " " + (hours < 10 ? "0" + hours : hours) + ":" +( minutes < 10
        ? "0" + minutes
        : minutes);
-  
-  console.log(finalDate);
 
   return finalDate;
 }
@@ -32,18 +30,19 @@ fetchReplies();
   return (
     <div className="m-4">
       {reply.warning === 0 ? (
-        <Card>
+        <Card className="bgc-sand">
           <CardBody>
             <CardTitle>
-              <span className="pointer" onClick={toggle}>
-                {reply.sender} {getDate()}
-                <UserInformationModal
-                  toggle={toggle}
-                  modal={modal}
-                  setModal={setModal}
-                  username={reply.sender}
-                />
+              <span className="pointer font-weight-bold" onClick={toggle}>
+                {reply.sender}
               </span>{" "}
+              <span>{getDate()}</span>
+              <UserInformationModal
+                toggle={toggle}
+                modal={modal}
+                setModal={setModal}
+                username={reply.sender}
+              />
             </CardTitle>
             <CardText>{reply.message}</CardText>
           </CardBody>
@@ -63,17 +62,18 @@ fetchReplies();
         </Card>
       ) : (
         <Alert color="danger">
-          <Card>
+          <Card className="bcg-sand">
             <CardBody>
-              <span className="pointer" onClick={toggle}>
-                {reply.sender} {getDate()}
-                <UserInformationModal
-                  toggle={toggle}
-                  modal={modal}
-                  setModal={setModal}
-                  username={reply.sender}
-                />
+              <span className="pointer font-weight-bold" onClick={toggle}>
+                {reply.sender}
               </span>{" "}
+              <span>{getDate()}</span>
+              <UserInformationModal
+                toggle={toggle}
+                modal={modal}
+                setModal={setModal}
+                username={reply.sender}
+              />
               <CardText>{reply.message}</CardText>
             </CardBody>
             {user ? (

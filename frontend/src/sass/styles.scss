@@ -7,6 +7,7 @@
   --dark-grey: #707070;
   --sand: #f3c6a5;
   --black: #000000;
+  --red: #f8d7da;
 }
 
 body{
@@ -44,6 +45,7 @@ background-color: var(--sand);
 .button-style{
   border: none !important;
   color: var(--black) !important;
+  padding: 0.8em !important;
 }
 
 .btn-secondary:hover {
@@ -55,4 +57,8 @@ background-color: var(--sand);
 }
  .btn-secondary:focus{
    background-color: var(--dark-yellow);
+ }
+ .error-text{
+background-color: #db7e7e;
+ padding: 0.8em !important;
  }

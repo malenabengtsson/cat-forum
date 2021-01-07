@@ -6,7 +6,7 @@ import { Modal } from "reactstrap";
 
 const AuthenticationModal = (props) => {
   const [isRegistered, setIsRegistered] = useState(true);
-console.log(props);
+
   return (
     <div>
       <Modal isOpen={props.modalIsOpen} toggle={props.toggleModal} size="lg">
