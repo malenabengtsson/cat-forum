@@ -27,10 +27,15 @@ const ThreadList = () =>{
   }, [])
 
   return (
-    <div>
+    <div className="m-4">
       {user ? (
-        <div>
-          <Button onClick={toggle}>Create new thread</Button>
+        <div className="m-4">
+          <Button
+            className="bgc-yellow button-style"
+            onClick={toggle}
+          >
+            Create new thread
+          </Button>
           <CreateNewThreadModal
             toggle={toggle}
             modal={modal}

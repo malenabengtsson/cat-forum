@@ -65,18 +65,15 @@ fetchReplies();
         <Alert color="danger">
           <Card>
             <CardBody>
-              <CardTitle tag="h5">
-                <span className="pointer" onClick={toggle}>
-                  {reply.sender}{" "}
-                  <UserInformationModal
-                    toggle={toggle}
-                    modal={modal}
-                    setModal={setModal}
-                    username={reply.sender}
-                  />
-                </span>{" "}
-                {getDate()}
-              </CardTitle>
+              <span className="pointer" onClick={toggle}>
+                {reply.sender} {getDate()}
+                <UserInformationModal
+                  toggle={toggle}
+                  modal={modal}
+                  setModal={setModal}
+                  username={reply.sender}
+                />
+              </span>{" "}
               <CardText>{reply.message}</CardText>
             </CardBody>
             {user ? (

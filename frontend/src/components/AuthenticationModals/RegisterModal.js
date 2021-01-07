@@ -35,13 +35,13 @@ const RegisterModal = (props) => {
   };
   return (
     <div className="mx-auto authentication-modals">
-      <h2 className="mt-4 text-center tradeHub-orange font-weight-bold col-sm-12 col-lg-12">
+      <h2 className="mt-4 text-center font-weight-bold col-sm-12 col-lg-12">
         Registrera
       </h2>
       <ModalBody className="m-4">
         <Form onSubmit={performRegistration} className="row">
           <FormGroup className="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-            <Label for="email" className="tradeHub-orange font-weight-bold">
+            <Label for="email" className=" font-weight-bold">
               Email
             </Label>
             <Input
@@ -54,11 +54,11 @@ const RegisterModal = (props) => {
             />
           </FormGroup>
           <FormGroup className="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-            <Label for="username" className="tradeHub-orange font-weight-bold">
+            <Label for="username" className=" font-weight-bold">
               Username
             </Label>
             <Input
-              className="light-grey-background tradeHub-input"
+              className=""
               type="text"
               placeholder="Username"
               value={username}
@@ -70,7 +70,7 @@ const RegisterModal = (props) => {
             <Label for="password">Password</Label>
             <Input
               required
-              className="light-grey-background tradeHub-input"
+              className=""
               type="password"
               placeholder="Password"
               value={password}
@@ -87,7 +87,7 @@ const RegisterModal = (props) => {
                 ----
               </Label>
             )}
-            <Button className="tradeHub-button col-12 font-weight-bold register-button">
+            <Button className="bgc-yellow button-style col-12 font-weight-bold register-button">
               Registrera
             </Button>
           </FormGroup>

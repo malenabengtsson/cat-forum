@@ -12,7 +12,7 @@ import { useHistory } from "react-router-dom";
 import {UserContext} from '../contexts/UserContextProvider'
 import AuthenticationModal from './AuthenticationModals/AuthenticationModal'
 import UserInformationModal from './UserInformationModal'
-const catLogo = require('../images/catforum.png')
+import catLogo from '../images/catforum.png'
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -30,13 +30,10 @@ const Header = () => {
     const goToHomePage = () => {
       history.push("/");
     };
-     const goToMyPage = () => {
-      // history.push("/mypage");
-      console.log('Add mypage here');
-     };
+  
 
      const logout = async () => {
-       let res = await fetch("/auth/logout");
+       await fetch("/auth/logout");
        setUser(null);
        history.push("/");
      };
@@ -44,8 +41,9 @@ const Header = () => {
   return (
     <div>
       <Navbar color="light" light expand="md">
-        <NavbarBrand onClick={goToHomePage} className="pointer">
-          Catforum
+        <NavbarBrand className="pointer">
+          <img src={catLogo}
+          />
         </NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
@@ -58,7 +56,7 @@ const Header = () => {
                   </NavLink>
                   <AuthenticationModal
                     modalIsOpen={modalIsOpen}
-                    toggleModal={toggle}
+                    toggleModal={toggleModal}
                     setModalIsOpen={setModalIsOpen}
                   />
                 </NavItem>

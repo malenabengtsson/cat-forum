@@ -114,7 +114,12 @@ fetchUserByUsername();
           )}
           {user && user.userRole === "admin" && clickedUser != null ? (
             <div>
-              <Button onClick={() => removeUser()}>Remove user</Button>
+              <Button
+                className="bgc-yellow button-style col-4"
+                onClick={() => removeUser()}
+              >
+                Remove user
+              </Button>
               {clickedUser && clickedUser.userRole === "moderator" ? (
                 <div>
                   <Button
@@ -127,6 +132,7 @@ fetchUserByUsername();
                     Remove as moderator
                   </Button>{" "}
                   <Button
+                    className="col-4 bgc-yellow button-style"
                     onClick={() =>
                       setShowAddModeratorInformation(
                         !showAddModeratorInformation
@@ -138,6 +144,7 @@ fetchUserByUsername();
                 </div>
               ) : (
                 <Button
+                  className="col-4 bgc-yellow button-style"
                   onClick={() =>
                     setShowAddModeratorInformation(!showAddModeratorInformation)
                   }

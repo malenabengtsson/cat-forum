@@ -31,7 +31,7 @@ const LoginModal = (props) => {
   };
   return (
     <div className="row mx-auto authentication-modals">
-      <h2 className="text-center mt-4 tradeHub-orange font-weight-bold col-12">
+      <h2 className="text-center mt-4 font-weight-bold col-12">
         Logga in
       </h2>
       <ModalBody className="">
@@ -39,13 +39,13 @@ const LoginModal = (props) => {
           <FormGroup className="col-xs-8 col-sm-12 col-md-12 col-lg-12 m-0">
             <Label
               for="emailAddress"
-              className="tradeHub-dark-grey font-weight-bold"
+              className=" font-weight-bold"
             >
               Email
             </Label>
             <Input
               required
-              className="light-grey-background tradeHub-input"
+              className=""
               type="email"
               placeholder="Email"
               value={email}
@@ -56,7 +56,7 @@ const LoginModal = (props) => {
             <Label for="password">Password</Label>
             <Input
               required
-              className="light-grey-background tradeHub-input"
+              className=""
               type="password"
               placeholder="Password"
               value={password}
@@ -71,7 +71,7 @@ const LoginModal = (props) => {
             ) : (
               ""
             )}
-            <Button className="tradeHub-button col-xs-8 col-sm-12 col-md-12 col-lg-12 font-weight-bold">
+            <Button className="bgc-yellow button-style col-xs-8 col-sm-12 col-md-12 col-lg-12 font-weight-bold">
               Logga in
             </Button>
           </FormGroup>
@@ -82,7 +82,7 @@ const LoginModal = (props) => {
             {" "}
             Skapa konto{" "}
             <span className="text-primary inline pointer">
-              <span onClick={() => props.setIsRegistered(!props.isRegistered)}>
+              <span className="pointer" onClick={() => props.setIsRegistered(!props.isRegistered)}>
                 här
               </span>
             </span>

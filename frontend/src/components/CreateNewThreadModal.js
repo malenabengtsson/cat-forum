@@ -77,7 +77,7 @@ const CreateNewThreadModal = (props) => {
             />
             </FormGroup>
             <FormGroup>
-              <Button>
+              <Button className=" bgc-yellow button-style">
                 Create thread
               </Button>
             </FormGroup>

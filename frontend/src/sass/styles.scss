@@ -1,3 +1,58 @@
+:root {
+  --white: #ffffff;
+  --light-pink: #aa7e74; 
+  --yellow: #f3dba5;
+  --dark-yellow: #b4a47e;
+  --light-brown: #aa8e74;
+  --dark-grey: #707070;
+  --sand: #f3c6a5;
+  --black: #000000;
+}
+
+body{
+  background-color: #aa8e74 !important;
+}
+
+.card{
+  border: none !important;
+}
+
 .pointer {
   cursor: pointer;
 }
+
+.bg-light{
+  background-color: #ffffff !important;
+}
+
+.bgc-light-pink{
+  background-color: var(--light-pink);
+}
+
+.bgc-yellow {
+  background-color: var(--yellow);
+}
+
+.bgc-light-brown{
+background-color: var(--light-brown);
+}
+
+.bgc-sand{
+background-color: var(--sand);
+}
+
+.button-style{
+  border: none !important;
+  color: var(--black) !important;
+}
+
+.btn-secondary:hover {
+  background-color: var(--dark-yellow);
+}
+
+.btn-secondary:active{
+ background-color: var(--dark-yellow);
+}
+ .btn-secondary:focus{
+   background-color: var(--dark-yellow);
+ }

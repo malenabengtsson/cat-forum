@@ -17,7 +17,7 @@ const ThreadItem = ({thread}) =>{
   return (
     <div className="m-4 pointer">
       <Card onClick={goToReplyPage}>
-        <CardBody>
+        <CardBody className="bgc-sand">
           <CardTitle tag="h5">{thread.title}</CardTitle>
           <CardText>{thread.creator}</CardText>
         </CardBody>
