@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react'
+import React, { useState, useContext } from "react";
 import {
   Collapse,
   Navbar,
@@ -7,43 +7,41 @@ import {
   Nav,
   NavItem,
   NavLink,
-} from 'reactstrap';
+} from "reactstrap";
 import { useHistory } from "react-router-dom";
-import {UserContext} from '../contexts/UserContextProvider'
-import AuthenticationModal from './AuthenticationModals/AuthenticationModal'
-import UserInformationModal from './UserInformationModal'
-import catLogo from '../images/catforum.png'
+import { UserContext } from "../contexts/UserContextProvider";
+import AuthenticationModal from "./AuthenticationModals/AuthenticationModal";
+import UserInformationModal from "./UserInformationModal";
+import catLogo from "../images/catforum.png";
 
 const Header = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [modalIsOpen, setModalIsOpen] = useState(false);
-     const { user, setUser } = useContext(UserContext);
-     const [userModal, setUserModal] = useState(false);
-     const Usertoggle = () => setUserModal(!userModal);
+  const [isOpen, setIsOpen] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const { user, setUser } = useContext(UserContext);
+  const [userModal, setUserModal] = useState(false);
+  const Usertoggle = () => setUserModal(!userModal);
 
   let history = useHistory();
   const toggle = () => setIsOpen(!isOpen);
-   const toggleModal = () => {
-     setModalIsOpen(!modalIsOpen);
-   };
+  const toggleModal = () => {
+    setModalIsOpen(!modalIsOpen);
+  };
 
-    const goToHomePage = () => {
-      history.push("/");
-    };
-  
+  const goToHomePage = () => {
+    history.push("/");
+  };
 
-     const logout = async () => {
-       await fetch("/auth/logout");
-       setUser(null);
-       history.push("/");
-     };
-    
+  const logout = async () => {
+    await fetch("/auth/logout");
+    setUser(null);
+    history.push("/");
+  };
+
   return (
     <div>
       <Navbar color="light" light expand="md">
         <NavbarBrand onClick={goToHomePage} className="pointer">
-          <img src={catLogo}
-          />
+          <img src={catLogo} alt="Cat forum logo" />
         </NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
@@ -52,7 +50,7 @@ const Header = () => {
               <>
                 <NavItem>
                   <NavLink className="pointer" onClick={toggleModal}>
-                    Logga in
+                    Log in
                   </NavLink>
                   <AuthenticationModal
                     modalIsOpen={modalIsOpen}
@@ -65,7 +63,7 @@ const Header = () => {
               <>
                 <NavItem className="">
                   <NavLink className="pointer" onClick={Usertoggle}>
-                    Min sida
+                    My information
                   </NavLink>
                   <UserInformationModal
                     toggle={Usertoggle}
@@ -76,7 +74,7 @@ const Header = () => {
                 </NavItem>
                 <NavItem className="">
                   <NavLink className="pointer" onClick={logout}>
-                    Logga ut
+                    Log out
                   </NavLink>
                 </NavItem>
               </>
@@ -86,5 +84,5 @@ const Header = () => {
       </Navbar>
     </div>
   );
-}
+};
 export default Header;

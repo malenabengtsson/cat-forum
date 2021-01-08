@@ -1,39 +1,34 @@
-import React, { useContext, useEffect, useState } from 'react'
-import {
- Button
-} from 'reactstrap';
-import { SubjectContext } from '../contexts/SubjectContextProvider'
-import {UserContext} from '../contexts/UserContextProvider'
-import ThreadItem from './ThreadItem'
-import CreateNewThreadModal from './CreateNewThreadModal'
+import React, { useContext, useEffect, useState } from "react";
+import { Button } from "reactstrap";
+import { SubjectContext } from "../contexts/SubjectContextProvider";
+import { UserContext } from "../contexts/UserContextProvider";
+import ThreadItem from "./ThreadItem";
+import CreateNewThreadModal from "./CreateNewThreadModal";
 
-const ThreadList = () =>{
+const ThreadList = () => {
   const { chosenSubject } = useContext(SubjectContext);
-  const {user} = useContext(UserContext)
+  const { user } = useContext(UserContext);
   const [threads, setThreads] = useState(null);
 
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
 
-  const fetchThreads = async () =>{
-    let result = await fetch('/rest/threads/' + chosenSubject.id)
+  const fetchThreads = async () => {
+    let result = await fetch("/rest/threads/" + chosenSubject.id);
     result = await result.json();
-    console.log(result);
     setThreads(result);
-  }
+  };
 
   useEffect(() => {
-   fetchThreads()
-  }, [])
+    fetchThreads();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="m-4">
       {user ? (
         <div className="m-4">
-          <Button
-            className="bgc-yellow button-style"
-            onClick={toggle}
-          >
+          <Button className="bgc-yellow button-style" onClick={toggle}>
             Create new thread
           </Button>
           <CreateNewThreadModal
@@ -52,5 +47,5 @@ const ThreadList = () =>{
         })}
     </div>
   );
-}
+};
 export default ThreadList;

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import LoginModal from './LoginModal'
-import RegisterModal from './RegisterModal'
-
+import LoginModal from "./LoginModal";
+import RegisterModal from "./RegisterModal";
 import { Modal } from "reactstrap";
 
 const AuthenticationModal = (props) => {

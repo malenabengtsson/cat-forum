@@ -1,13 +1,13 @@
 import React, { useState, useContext } from "react";
 import { Button, ModalBody, Form, FormGroup, Label, Input } from "reactstrap";
-import {UserContext} from '../../contexts/UserContextProvider'
+import { UserContext } from "../../contexts/UserContextProvider";
 
 const RegisterModal = (props) => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
-     const { fetchUser } = useContext(UserContext);
+  const { fetchUser } = useContext(UserContext);
 
   const performRegistration = async (e) => {
     e.preventDefault();
@@ -16,7 +16,7 @@ const RegisterModal = (props) => {
       email: email,
       username: username,
       password: password,
-      roleId: 1    
+      roleId: 1,
     };
 
     let response = await fetch("/auth/register", {
@@ -25,28 +25,23 @@ const RegisterModal = (props) => {
       body: JSON.stringify(userInformation),
     });
 
-    console.log(response);
-    response = await response.json()
-    console.log(response.error);
-  
-    
+    response = await response.json();
 
-    if (response.error === 'username') {
-      setErrorMessage('The username is already taken');
-    } else if(response.error === 'email') {
-         setErrorMessage("The email has already been registered");
-    }
-    else if(response.error === 'username email'){
-         setErrorMessage('Email is already registered and username is already taken');
-
-    }
-    else{
-      console.log('in else');
+    if (response.error === "username") {
+      setErrorMessage("The username is already taken");
+    } else if (response.error === "email") {
+      setErrorMessage("The email has already been registered");
+    } else if (response.error === "username email") {
+      setErrorMessage(
+        "Email is already registered and username is already taken"
+      );
+    } else {
+      console.log("in else");
       setErrorMessage(null);
       fetchUser();
       props.setModalIsOpen(!props.modalIsOpen);
     }
-    };
+  };
   return (
     <div className="mx-auto authentication-modals">
       <h2 className="mt-4 text-center font-weight-bold col-sm-12 col-lg-12">
@@ -103,18 +98,17 @@ const RegisterModal = (props) => {
               </Label>
             )}
             <Button className="bgc-yellow button-style col-12 font-weight-bold register-button">
-              Registrera
+              Register
             </Button>
           </FormGroup>
         </Form>
         <div className="text-center mt-4">
-          <p className="font-italic mb-0">Har du redan ett konto?</p>
+          <p className="font-italic mb-0">Already have an account?</p>
           <p className="font-italic">
-            {" "}
-            Logga in{" "}
+            Log in{" "}
             <span className="text-primary click-text inline">
               <span onClick={() => props.setIsRegistered(!props.isRegistered)}>
-                här
+                here
               </span>
             </span>
           </p>

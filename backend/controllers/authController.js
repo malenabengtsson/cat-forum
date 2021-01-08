@@ -54,7 +54,6 @@ const checkIfEmailIsUnique = (email) => {
   );
   result = statement.all({ email: email });
   if (result.length > 0) {
-    console.log("email not unique");
     return false;
   } else {
     return true;
@@ -67,7 +66,6 @@ const checkIfUsernameIsUnique = (username) => {
   );
   result = statement.all({ username: username });
   if (result.length > 0) {
-    console.log("username not unique");
     return false;
   } else {
     return true;

@@ -1,18 +1,22 @@
-import React, { useContext } from 'react'
+import React, { useContext } from "react";
 import { Card, CardText, CardBody, CardTitle } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import {SubjectContext} from '../contexts/SubjectContextProvider'
-const ThreadItem = ({thread}) =>{
-  const {setChosenThread, chosenSubject} = useContext(SubjectContext)
- 
+import { SubjectContext } from "../contexts/SubjectContextProvider";
+
+const ThreadItem = ({ thread }) => {
+  const { setChosenThread, chosenSubject } = useContext(SubjectContext);
 
   let history = useHistory();
 
-  const goToReplyPage = () =>{
+  const goToReplyPage = () => {
     setChosenThread(thread);
-    history.push("/" + chosenSubject.title.replace(/\s+/g, '-') + "/" + thread.title.replace(/\s+/g, '-'));
-
-  }
+    history.push(
+      "/" +
+        chosenSubject.title.replace(/\s+/g, "-") +
+        "/" +
+        thread.title.replace(/\s+/g, "-")
+    );
+  };
 
   return (
     <div className="m-4 pointer">
@@ -24,5 +28,5 @@ const ThreadItem = ({thread}) =>{
       </Card>
     </div>
   );
-}
-export default ThreadItem
+};
+export default ThreadItem;

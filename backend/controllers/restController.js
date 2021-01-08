@@ -3,23 +3,21 @@ const db = sqlite3("../cat-forum.db");
 const AccessControl = require("accesscontrol");
 const ac = new AccessControl();
 
-ac.grant('null').readAny('thread').readAny('user')
-.grant("basic")
-.extend('null')
+ac.grant("null")
+  .readAny("thread")
+  .readAny("user")
+  .grant("basic")
+  .extend("null")
   .createOwn("thread")
-  .readAny('user')
-  .updateOwn("user")
-  .updateOwn('thread')
+  .createOwn('reply')
   .grant("moderator")
   .extend("basic")
   .updateAny("thread")
-  .updateAny('user')
-  .deleteAny('replyIfModerator')
+  .deleteAny("replyIfModerator")
   .grant("admin")
   .extend("moderator")
-  .updateAny('userOrModerator')
+  .updateAny("user")
   .deleteAny("user")
-  .deleteAny("thread");
 
 const getSubjects = async (req, res) => {
   let statement = db.prepare(/*sql*/ `
@@ -67,6 +65,9 @@ const getUserByUsername = async(req, res) =>{
    }
    res.json(user)
  }
+ else{
+   res.status(403).json({ error: "Not authorized to access" });
+ }
 }
 const createThread = async (req, res) => {
   const permission = ac.can(req.session.user.userRole).createOwn("thread");
@@ -82,7 +83,7 @@ const createThread = async (req, res) => {
       })
     );
   } else {
-    console.log("Permission not granted");
+    res.status(403).json({ error: "Not authorized to access" });
   }
 };
 const createReply = async (req, res) => {
@@ -101,28 +102,49 @@ const createReply = async (req, res) => {
       })
     );
   }
+  else{
+    res.status(403).json({ error: "Not authorized to access" });
+  }
 };
 
 const deleteReply = async (req, res) =>{
-  let statement = db.prepare(/*sql*/ `
-  DELETE FROM replies WHERE id = $replyId`)
-
-  res.json(statement.run({replyId: req.params.replyId}))
+  const permission = ac.can(req.session.user.userRole).deleteAny('replyIfModerator');
+  if(permission.granted){
+    let statement = db.prepare(/*sql*/ `
+    DELETE FROM replies WHERE id = $replyId`)
+  
+    res.json(statement.run({replyId: req.params.replyId}))
+  }
+  else{
+    res.status(403).json({ error: "Not authorized to access" });
+  }
 }
 
 const deleteUser = (req, res) =>{
- let deleteStatement = db.prepare(/*sql*/`DELETE FROM users WHERE id=$userId`)
- let deleteModeratorConnections = db.prepare(
-   /*sql*/ `DELETE FROM threadsXmoderatorUsers WHERE userId = $userId`
- );
- deleteModeratorConnections.run({userId: parseInt(req.params.userId)})
- res.json(deleteStatement.run({ userId: parseInt(req.params.userId) }));
+const permission = ac.can(req.session.user.userRole).deleteAny('user');
+
+if(permission.granted){
+  let deleteStatement = db.prepare(/*sql*/`DELETE FROM users WHERE id=$userId`)
+  let deleteModeratorConnections = db.prepare(
+    /*sql*/ `DELETE FROM threadsXmoderatorUsers WHERE userId = $userId`
+  );
+  deleteModeratorConnections.run({userId: parseInt(req.params.userId)})
+  res.json(deleteStatement.run({ userId: parseInt(req.params.userId) }));
+ }
+ else{
+   res.status(403).json({ error: "Not authorized to access" });
+ }
 }
 
 const lockThread = async (req, res) =>{
+  const permission = ac.can(req.session.user.userRole).updateAny("thread");
+if(permission.granted){
   let statement = db.prepare(/*sql*/`
   UPDATE threads SET locked = 1 WHERE id = $threadId`)
   res.json(statement.run({threadId : req.params.threadId}))
+} else{
+  res.status(403).json({ error: "Not authorized to access" });
+}
 }
 
 const getAllThreadsIfUserIsModerator = async (req, res) => {
@@ -141,37 +163,32 @@ const checkIfUserIsModerator =  (userId) => {
     return true;
   }
   else{
-    console.log('empty');
     return false;
   }
 };
 
 const demoteToBasicUser = (userId) => {
-  console.log('In demote ');
-  let statement = db.prepare(/*sql*/`UPDATE users SET roleId = 1 WHERE id 
-  = ${userId}`);
-  statement.run()
-
-}
+    let statement = db.prepare(/*sql*/`UPDATE users SET roleId = 1 WHERE id 
+    = $userId`);
+    statement.run({userId: userId})
+  }
 
 const promoteToModeratorRole = (userId) =>{
-console.log('in promote');
+ 
  let statement = db.prepare(/*sql*/ `UPDATE users SET roleId = 2 WHERE id 
-  = ${userId}`);
- statement.run();
-
+  = $userId`);
+ statement.run({userId: userId});
 }
+ 
 
 
 const promoteToModerator = async (req, res) => {
    const permission = ac
      .can(req.session.user.userRole)
-     .updateAny("userOrModerator");
+     .updateAny("user");
 
      if(permission.granted){
-         console.log('Make moderator');
          let check = checkIfUserIsModerator(parseInt(req.params.userId));
-         console.log(check);
          if(!check){
            promoteToModeratorRole(parseInt(req.params.userId));
          }
@@ -184,13 +201,15 @@ const promoteToModerator = async (req, res) => {
          })
        );
        }
+       else{
+         res.status(403).json({ error: "Not authorized to access" });
+       }
      }
 
 
 const removeModeratorFromThread = async (req, res) => {
-  console.log(req.session.user);
    const permission = ac.can(req.session.user.userRole)
-     .updateAny("userOrModerator");
+     .updateAny("user");
 
      if(permission.granted){
        let statement = db.prepare(
@@ -209,6 +228,9 @@ const removeModeratorFromThread = async (req, res) => {
        }
        res.json(result)
        
+     }
+     else{
+       res.status(403).json({ error: "Not authorized to access" });
      }
 }
 

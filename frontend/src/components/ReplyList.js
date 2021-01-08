@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from "react";
 import {
   Alert,
   Button,
@@ -11,80 +11,77 @@ import {
   CardTitle,
   CardFooter,
 } from "reactstrap";
-import {SubjectContext} from '../contexts/SubjectContextProvider'
-import {UserContext} from '../contexts/UserContextProvider'
-import ReplyItem from './ReplyItem'
+import { SubjectContext } from "../contexts/SubjectContextProvider";
+import { UserContext } from "../contexts/UserContextProvider";
+import ReplyItem from "./ReplyItem";
 
-const ReplyList = () =>{
-  const [replies, setReplies] = useState(null)
-  const [newReply, setNewReply] = useState('')
+const ReplyList = () => {
+  const [replies, setReplies] = useState(null);
+  const [newReply, setNewReply] = useState("");
   const [threadIsLocked, setThreadIsLocked] = useState(false);
-  const [warningReply, setWarningReply] = useState(false)
-  const {chosenThread} = useContext(SubjectContext);
-  const {user} = useContext(UserContext);
-  const [isModerator, setIsModerator] = useState('')
+  const [warningReply, setWarningReply] = useState(false);
+  const { chosenThread } = useContext(SubjectContext);
+  const { user } = useContext(UserContext);
+  const [isModerator, setIsModerator] = useState("");
 
-  console.log('Warning', warningReply);
-  const fetchReplies = async () =>{
-    let result = await fetch('/rest/replies/' + chosenThread.id)
+  const fetchReplies = async () => {
+    let result = await fetch("/rest/replies/" + chosenThread.id);
     result = await result.json();
-    setReplies(result)
+    setReplies(result);
 
-    if(chosenThread.locked === 1){
-      setThreadIsLocked(true)
+    if (chosenThread.locked === 1) {
+      setThreadIsLocked(true);
     }
-  }
+  };
 
-  const sendReply = async (e) =>{
-e.preventDefault()
- let replyInformation = {
-   message: newReply,
-   sender: user.username,
-   warning: warningReply === true ? 1 : 0
- };
-               
-  let reply = await fetch("/rest/replies/" + chosenThread.id, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(replyInformation),
-  });
-  setNewReply('')
-  fetchReplies()
-  }
+  const sendReply = async (e) => {
+    e.preventDefault();
+    let replyInformation = {
+      message: newReply,
+      sender: user.username,
+      warning: warningReply === true ? 1 : 0,
+    };
 
-  const isLoggedInUserModeratorForThread = async () =>{
-let result = await fetch("/rest/moderator/" + user.id);
-result = await result.json();
+    await fetch("/rest/replies/" + chosenThread.id, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(replyInformation),
+    });
+    setNewReply("");
+    fetchReplies();
+  };
 
-result.map((thread, i) => {
-  if(thread.id === chosenThread.id){
-    setIsModerator(true)
-  }
-})
-}
+  const isLoggedInUserModeratorForThread = async () => {
+    let result = await fetch("/rest/moderator/" + user.id);
+    result = await result.json();
 
-const lockThread = async () => {
-  console.log('In lock');
-  await fetch('/rest/lockThread/' + chosenThread.id)
-  setThreadIsLocked(true);
-}
+    result.forEach((thread) => {
+      if (thread.id === chosenThread.id) {
+        setIsModerator(true);
+      }
+    });
+  };
 
-const toggleWarningReply = () => {
-setWarningReply(!warningReply)
-}
+  const lockThread = async () => {
+    await fetch("/rest/lockThread/" + chosenThread.id);
+    setThreadIsLocked(true);
+  };
+
+  const toggleWarningReply = () => {
+    setWarningReply(!warningReply);
+  };
 
   useEffect(() => {
-  fetchReplies()
- if(user != null){
-    isLoggedInUserModeratorForThread()
-  }
+    fetchReplies();
+    if (user != null) {
+      isLoggedInUserModeratorForThread();
+    }
 
-  return () =>{
-    console.log('in return');
-    setWarningReply(false)
-    console.log(warningReply);
-  }
-  }, [])
+    return () => {
+      setWarningReply(false);
+    };
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div>
@@ -127,14 +124,18 @@ setWarningReply(!warningReply)
               {isModerator ||
               (user.userRole === "admin" && threadIsLocked === false) ? (
                 <CardFooter className="text-muted">
-                  <p className="m-0 pointer" onClick={() => lockThread()}>
-                    Lock thread
-                  </p>
                   <Button
+                    className="mr-2 pointer bgc-yellow button-style"
+                    onClick={() => lockThread()}
+                  >
+                    Lock thread
+                  </Button>
+                  <Button
+                    className="bgc-yellow button-style"
                     onClick={() => toggleWarningReply()}
                     active={warningReply}
                   >
-                    Warning
+                    Warning reply
                   </Button>
                 </CardFooter>
               ) : (
@@ -150,5 +151,5 @@ setWarningReply(!warningReply)
       )}
     </div>
   );
-}
-export default ReplyList
+};
+export default ReplyList;

@@ -1,20 +1,16 @@
-import React, { useContext } from 'react'
+import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
-import {
-  Card, CardText, CardBody,
-  CardTitle, 
-} from 'reactstrap';
-import {SubjectContext} from '../contexts/SubjectContextProvider'
+import { Card, CardText, CardBody, CardTitle } from "reactstrap";
+import { SubjectContext } from "../contexts/SubjectContextProvider";
 
-const SubjectItem = ({subject}) =>{
-  const {setChosenSubject} = useContext(SubjectContext)
+const SubjectItem = ({ subject }) => {
+  const { setChosenSubject } = useContext(SubjectContext);
   let history = useHistory();
-  
-  const goToSubject = () =>{
-    setChosenSubject(subject);
-    history.push("/" + subject.title.replace(/\s+/g, '-'));
 
-  }
+  const goToSubject = () => {
+    setChosenSubject(subject);
+    history.push("/" + subject.title.replace(/\s+/g, "-"));
+  };
 
   return (
     <div className="m-4 pointer">
@@ -26,6 +22,6 @@ const SubjectItem = ({subject}) =>{
       </Card>
     </div>
   );
-}
+};
 
-export default SubjectItem
+export default SubjectItem;

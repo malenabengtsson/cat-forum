@@ -1,32 +1,41 @@
-import React, {useContext, useState} from 'react'
-import { Alert, Card, CardText, CardBody, CardTitle, CardFooter } from "reactstrap";
-import {UserContext} from '../contexts/UserContextProvider'
-import UserInformationModal from './UserInformationModal'
-const ReplyItem = ({reply, isModerator, fetchReplies}) =>{
-    const [modal, setModal] = useState(false);
-    const toggle = () => setModal(!modal);
-    const {user} = useContext(UserContext);
+import React, { useContext, useState } from "react";
+import {
+  Alert,
+  Card,
+  CardText,
+  CardBody,
+  CardTitle,
+  CardFooter,
+  Button,
+} from "reactstrap";
+import { UserContext } from "../contexts/UserContextProvider";
+import UserInformationModal from "./UserInformationModal";
 
-const getDate = () =>{
-  let date = new Date(reply.timestamp)
-  let yearMonthAndDay = date.toLocaleDateString()
-   let hours = date.getHours();
-   let minutes = date.getMinutes()
-  
-   let finalDate =
-     yearMonthAndDay + " " + (hours < 10 ? "0" + hours : hours) + ":" +( minutes < 10
-       ? "0" + minutes
-       : minutes);
+const ReplyItem = ({ reply, isModerator, fetchReplies }) => {
+  const [modal, setModal] = useState(false);
+  const toggle = () => setModal(!modal);
+  const { user } = useContext(UserContext);
 
-  return finalDate;
-}
+  const getDate = () => {
+    let date = new Date(reply.timestamp);
+    let yearMonthAndDay = date.toLocaleDateString();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
 
-const deleteReply = async () => {
-  console.log('in delete reply');
-await fetch('/rest/deleteReply/' + reply.id);
-fetchReplies();
+    let finalDate =
+      yearMonthAndDay +
+      " " +
+      (hours < 10 ? "0" + hours : hours) +
+      ":" +
+      (minutes < 10 ? "0" + minutes : minutes);
 
-}
+    return finalDate;
+  };
+
+  const deleteReply = async () => {
+    await fetch("/rest/deleteReply/" + reply.id);
+    fetchReplies();
+  };
   return (
     <div className="m-4">
       {reply.warning === 0 ? (
@@ -49,9 +58,12 @@ fetchReplies();
           {user ? (
             isModerator || user.userRole === "admin" ? (
               <CardFooter className="text-muted">
-                <p className="m-0 pointer" onClick={() => deleteReply()}>
+                <Button
+                  className="m-0 pointer bgc-yellow button-style"
+                  onClick={() => deleteReply()}
+                >
                   Delete reply
-                </p>
+                </Button>
               </CardFooter>
             ) : (
               ""
@@ -79,9 +91,12 @@ fetchReplies();
             {user ? (
               isModerator || user.userRole === "admin" ? (
                 <CardFooter className="text-muted">
-                  <p className="m-0 pointer" onClick={() => deleteReply()}>
+                  <Button
+                    className="m-0 pointer bgc-yellow button-style"
+                    onClick={() => deleteReply()}
+                  >
                     Delete reply
-                  </p>
+                  </Button>
                 </CardFooter>
               ) : (
                 ""
@@ -94,5 +109,5 @@ fetchReplies();
       )}
     </div>
   );
-}
-export default ReplyItem
+};
+export default ReplyItem;

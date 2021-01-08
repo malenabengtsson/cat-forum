@@ -12,6 +12,7 @@
 
 body{
   background-color: #aa8e74 !important;
+  box-sizing: border-box;
 }
 
 .card{
@@ -48,16 +49,14 @@ background-color: var(--sand);
   padding: 0.8em !important;
 }
 
-.btn-secondary:hover {
-  background-color: var(--dark-yellow);
+.btn-secondary:hover, .btn-secondary:focus {
+  background-color: var(--dark-yellow) !important;
 }
 
-.btn-secondary:active{
- background-color: var(--dark-yellow);
+.btn-secondary:not(:disabled):not(.disabled).active, .btn-secondary:not(:disabled):not(.disabled):active, .show>.btn-secondary.dropdown-toggle {
+  background-color: var(--red) !important;
 }
- .btn-secondary:focus{
-   background-color: var(--dark-yellow);
- }
+
  .error-text{
 background-color: #db7e7e;
  padding: 0.8em !important;
