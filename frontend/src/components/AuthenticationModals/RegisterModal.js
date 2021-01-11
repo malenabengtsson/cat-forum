@@ -36,7 +36,6 @@ const RegisterModal = (props) => {
         "Email is already registered and username is already taken"
       );
     } else {
-      console.log("in else");
       setErrorMessage(null);
       fetchUser();
       props.setModalIsOpen(!props.modalIsOpen);

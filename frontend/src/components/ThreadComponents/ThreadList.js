@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button } from "reactstrap";
-import { SubjectContext } from "../contexts/SubjectContextProvider";
-import { UserContext } from "../contexts/UserContextProvider";
+import { SubjectContext } from "../../contexts/SubjectContextProvider";
+import { UserContext } from "../../contexts/UserContextProvider";
 import ThreadItem from "./ThreadItem";
 import CreateNewThreadModal from "./CreateNewThreadModal";
 

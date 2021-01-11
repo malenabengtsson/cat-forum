@@ -11,8 +11,8 @@ import {
   CardTitle,
   CardFooter,
 } from "reactstrap";
-import { SubjectContext } from "../contexts/SubjectContextProvider";
-import { UserContext } from "../contexts/UserContextProvider";
+import { SubjectContext } from "../../contexts/SubjectContextProvider";
+import { UserContext } from "../../contexts/UserContextProvider";
 import ReplyItem from "./ReplyItem";
 
 const ReplyList = () => {

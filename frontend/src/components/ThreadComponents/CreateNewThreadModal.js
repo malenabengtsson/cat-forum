@@ -8,8 +8,8 @@ import {
   Label,
   Input,
 } from "reactstrap";
-import { SubjectContext } from "../contexts/SubjectContextProvider";
-import { UserContext } from "../contexts/UserContextProvider";
+import { SubjectContext } from "../../contexts/SubjectContextProvider";
+import { UserContext } from "../../contexts/UserContextProvider";
 
 const CreateNewThreadModal = (props) => {
   const [threadTitle, setThreadTitle] = useState("");

@@ -11,7 +11,7 @@ import {
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../contexts/UserContextProvider";
 import AuthenticationModal from "./AuthenticationModals/AuthenticationModal";
-import UserInformationModal from "./UserInformationModal";
+import UserInformationModal from "./UserInformationComponents/UserInformationModal";
 import catLogo from "../images/catforum.png";
 
 const Header = () => {

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { Card, CardText, CardBody, CardTitle } from "reactstrap";
-import { SubjectContext } from "../contexts/SubjectContextProvider";
+import { SubjectContext } from "../../contexts/SubjectContextProvider";
 
 const SubjectItem = ({ subject }) => {
   const { setChosenSubject } = useContext(SubjectContext);

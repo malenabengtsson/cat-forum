@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Card, CardText, CardBody, CardTitle } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { SubjectContext } from "../contexts/SubjectContextProvider";
+import { SubjectContext } from "../../contexts/SubjectContextProvider";
 
 const ThreadItem = ({ thread }) => {
   const { setChosenThread, chosenSubject } = useContext(SubjectContext);

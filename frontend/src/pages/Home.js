@@ -1,5 +1,5 @@
 import React from 'react'
-import SubjectList from '../components/SubjectList'
+import SubjectList from '../components/SubjectComponents/SubjectList'
 
 const Home = () => {
   return (

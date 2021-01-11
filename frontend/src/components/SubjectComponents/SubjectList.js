@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import SubjectItem from "./SubjectItem";
-import { SubjectContext } from "../contexts/SubjectContextProvider";
+import { SubjectContext } from "../../contexts/SubjectContextProvider";
 
 const SubjectList = () => {
   const { fetchSubjects, subjects } = useContext(SubjectContext);

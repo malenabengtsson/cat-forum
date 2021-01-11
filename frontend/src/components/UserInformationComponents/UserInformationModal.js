@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Button, Modal, ModalBody } from "reactstrap";
-import { UserContext } from "../contexts/UserContextProvider";
+import { UserContext } from "../../contexts/UserContextProvider";
 import ModeratorButtonStyle from "./ModeratorButtonStyle";
 
 const UserInformationModal = (props) => {

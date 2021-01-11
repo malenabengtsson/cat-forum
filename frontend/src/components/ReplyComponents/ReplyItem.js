@@ -8,8 +8,8 @@ import {
   CardFooter,
   Button,
 } from "reactstrap";
-import { UserContext } from "../contexts/UserContextProvider";
-import UserInformationModal from "./UserInformationModal";
+import { UserContext } from "../../contexts/UserContextProvider";
+import UserInformationModal from "../UserInformationComponents/UserInformationModal";
 
 const ReplyItem = ({ reply, isModerator, fetchReplies }) => {
   const [modal, setModal] = useState(false);

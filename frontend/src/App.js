@@ -6,8 +6,8 @@ import UserContextProvider from './contexts/UserContextProvider'
 
 import Home from './pages/Home'
 import Header from './components/Header'
-import ThreadList from './components/ThreadList'
-import ReplyList from './components/ReplyList'
+import ThreadList from './components/ThreadComponents/ThreadList'
+import ReplyList from './components/ReplyComponents/ReplyList'
 import "bootstrap/dist/css/bootstrap.min.css";
 import './sass/styles.scss'
 
