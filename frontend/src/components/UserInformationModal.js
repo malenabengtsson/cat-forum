@@ -18,9 +18,9 @@ const UserInformationModal = (props) => {
   const [unModeratedThreads, setUnModeratedThreads] = useState("");
 
   const fetchUserByUsername = async () => {
-    if (showRemoveModeratorInformation) {
-      setShowRemoveModeratorInformation(false);
-    }
+    // if (showRemoveModeratorInformation) {
+    //   setShowRemoveModeratorInformation(false);
+    // }
     let result = await fetch("/rest/" + props.username);
     result = await result.json();
 
@@ -89,7 +89,7 @@ const UserInformationModal = (props) => {
         <h2 className="text-center mt-4 tradeHub-orange font-weight-bold col-12">
           {clickedUser ? clickedUser.username : "User have been deleted"}{" "}
         </h2>
-        <ModalBody className="">
+        <ModalBody>
           {clickedUser ? (
             <div>
               {moderatedThreads &&
@@ -116,6 +116,7 @@ const UserInformationModal = (props) => {
                 <>
                   <Button
                     className="col-3 bgc-yellow button-style m-2"
+                    active={showRemoveModeratorInformation}
                     onClick={() =>
                       setShowRemoveModeratorInformation(
                         !showRemoveModeratorInformation
@@ -126,6 +127,7 @@ const UserInformationModal = (props) => {
                   </Button>
                   <Button
                     className="col-3 bgc-yellow button-style m-2"
+                    active={showAddModeratorInformation}
                     onClick={() =>
                       setShowAddModeratorInformation(
                         !showAddModeratorInformation
@@ -138,6 +140,7 @@ const UserInformationModal = (props) => {
               ) : (
                 <Button
                   className="col-3 bgc-yellow button-style m-2"
+                  active={showAddModeratorInformation}
                   onClick={() =>
                     setShowAddModeratorInformation(!showAddModeratorInformation)
                   }
@@ -151,15 +154,14 @@ const UserInformationModal = (props) => {
           )}
           {showRemoveModeratorInformation ? (
             <div>
-              <h6>
-                Click on the thread to remove {clickedUser.username} as a
-                moderator
-              </h6>
-
               {moderatedThreads &&
                 moderatedThreads.map((x, i) => (
-                  <div onClick={() => removeAsModeratorFor(x)}>
-                    <ModeratorButtonStyle key={i} thread={x} title={"REMOVE"} />
+                  <div key={i} onClick={() => removeAsModeratorFor(x)}>
+                    <ModeratorButtonStyle
+                      onClick={() => removeAsModeratorFor(x)}
+                      thread={x}
+                      title={"REMOVE"}
+                    />
                   </div>
                 ))}
             </div>
@@ -168,13 +170,10 @@ const UserInformationModal = (props) => {
           )}
           {showAddModeratorInformation ? (
             <div>
-              <h6>
-                Click on the thread to add {clickedUser.username} as a moderator
-              </h6>
               {unModeratedThreads &&
                 unModeratedThreads.map((x, i) => (
-                  <div onClick={() => addAsModerator(x)}>
-                    <ModeratorButtonStyle key={i} thread={x} title={"ADD"} />
+                  <div key={i} onClick={() => addAsModerator(x)}>
+                    <ModeratorButtonStyle thread={x} title={"ADD"} />
                   </div>
                 ))}
             </div>

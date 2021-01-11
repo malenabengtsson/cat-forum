@@ -14,7 +14,7 @@ const SubjectItem = ({ subject }) => {
 
   return (
     <div className="m-4 pointer">
-      <Card onClick={() => goToSubject()}>
+      <Card className="no-border" onClick={() => goToSubject()}>
         <CardBody className="bgc-sand">
           <CardTitle tag="h5">{subject.title}</CardTitle>
           <CardText>{subject.description}</CardText>

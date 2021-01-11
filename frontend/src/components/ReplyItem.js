@@ -39,7 +39,7 @@ const ReplyItem = ({ reply, isModerator, fetchReplies }) => {
   return (
     <div className="m-4">
       {reply.warning === 0 ? (
-        <Card className="bgc-sand">
+        <Card className="bgc-sand no-border">
           <CardBody>
             <CardTitle>
               <span className="pointer font-weight-bold" onClick={toggle}>

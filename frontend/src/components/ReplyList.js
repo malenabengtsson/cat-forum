@@ -101,7 +101,7 @@ const ReplyList = () => {
       {user ? (
         chosenThread && threadIsLocked === false ? (
           <div className="m-4">
-            <Card className="bgc-sand">
+            <Card className="bgc-sand no-border">
               <CardBody className="bgc-sand">
                 <CardTitle tag="h5">Write a reply</CardTitle>
                 <CardText>
