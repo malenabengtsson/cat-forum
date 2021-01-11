@@ -22,27 +22,47 @@ ac.grant("null")
 const getSubjects = async (req, res) => {
   let statement = db.prepare(/*sql*/ `
    SELECT * FROM subjects`);
-  res.json(statement.all());
+
+   try{
+     res.json(statement.all());
+   }
+   catch{
+      res.status(400).json({ error: "Something went wrong" });
+   }
 };
 const getAllThreads = async (req, res) =>{
   let statement = db.prepare(
     /*sql*/ `SELECT * FROM threads`
   );
-  res.json(statement.all())
+
+  try{
+    res.json(statement.all())
+  }
+  catch{
+     res.status(400).json({ error: "Something went wrong" });
+  }
 }
 const getThreads = async (req, res) => {
   let statement = db.prepare(/*sql*/ `
    SELECT threads.* FROM threads, subjects WHERE threads.subjectId = $subjectId AND subjects.id = $subjectId
    `);
-
+try{
   res.json(statement.all({ subjectId: req.params.subjectId }));
+}
+catch{
+   res.status(400).json({ error: "Something went wrong" });
+}
 };
 
 const getReplies = async (req, res) => {
   let statement = db.prepare(/*sql*/ `
    SELECT replies.* FROM replies, threads WHERE replies.threadId = $threadId AND threads.id = $threadId `);
-
+try{
   res.json(statement.all({ threadId: req.params.threadId }));
+}
+catch{
+   res.status(400).json({ error: "Something went wrong" });
+}
 };
 
 const getUserByUsername = async(req, res) =>{
@@ -59,7 +79,14 @@ const getUserByUsername = async(req, res) =>{
          SELECT u.id, u.email, u.username, r.userRole FROM users as u, roles as r
          WHERE u.username = $username AND r.id = u.roleId
       `);
-   let user = statement.get({username: req.params.username}) || null;
+
+      let user;
+      try{
+        user = statement.get({username: req.params.username}) || null;
+      }
+      catch{
+         res.status(400).json({ error: "Something went wrong" });
+      }
    if (user) {
      delete user.password;
    }
@@ -74,14 +101,17 @@ const createThread = async (req, res) => {
   if (permission.granted) {
     let statement = db.prepare(/*sql*/ `
    INSERT into threads (title, subjectId, creator) VALUES ($title, $subjectId, $creator)`);
-
-    res.json(
-      statement.run({
-        title: req.body.title,
-        subjectId: req.params.subjectId,
-        creator: req.body.creator,
-      })
-    );
+try{
+  res.json(
+    statement.run({
+      title: req.body.title,
+      subjectId: req.params.subjectId,
+      creator: req.body.creator,
+    })
+  );
+}catch{
+   res.status(400).json({ error: "Something went wrong" });
+}
   } else {
     res.status(403).json({ error: "Not authorized to access" });
   }
@@ -91,16 +121,21 @@ const createReply = async (req, res) => {
   if (permission.granted) {
     let statement = db.prepare(/*sql*/ `INSERT INTO replies (message, threadId, timestamp, sender, warning) VALUES ($message, $threadId, $timestamp, $sender, $warning)
    `);
+ try{
 
-    res.json(
-      statement.run({
-        message: req.body.message,
-        threadId: req.params.threadId,
-        timestamp: Date.now(),
-        sender: req.body.sender,
-        warning: req.body.warning
-      })
-    );
+   res.json(
+     statement.run({
+       message: req.body.message,
+       threadId: req.params.threadId,
+       timestamp: Date.now(),
+       sender: req.body.sender,
+       warning: req.body.warning
+     })
+   );
+ }
+ catch{
+    res.status(400).json({ error: "Something went wrong" });
+ }
   }
   else{
     res.status(403).json({ error: "Not authorized to access" });
@@ -113,7 +148,12 @@ const deleteReply = async (req, res) =>{
     let statement = db.prepare(/*sql*/ `
     DELETE FROM replies WHERE id = $replyId`)
   
-    res.json(statement.run({replyId: req.params.replyId}))
+    try{
+
+      res.json(statement.run({replyId: req.params.replyId}))
+    } catch{
+       res.status(400).json({ error: "Something went wrong" });
+    }
   }
   else{
     res.status(403).json({ error: "Not authorized to access" });
@@ -128,8 +168,12 @@ if(permission.granted){
   let deleteModeratorConnections = db.prepare(
     /*sql*/ `DELETE FROM threadsXmoderatorUsers WHERE userId = $userId`
   );
-  deleteModeratorConnections.run({userId: parseInt(req.params.userId)})
-  res.json(deleteStatement.run({ userId: parseInt(req.params.userId) }));
+  try{
+    deleteModeratorConnections.run({userId: parseInt(req.params.userId)})
+    res.json(deleteStatement.run({ userId: parseInt(req.params.userId) }));
+  } catch{
+     res.status(400).json({ error: "Something went wrong" });
+  }
  }
  else{
    res.status(403).json({ error: "Not authorized to access" });
@@ -141,7 +185,13 @@ const lockThread = async (req, res) =>{
 if(permission.granted){
   let statement = db.prepare(/*sql*/`
   UPDATE threads SET locked = 1 WHERE id = $threadId`)
-  res.json(statement.run({threadId : req.params.threadId}))
+  try{
+
+    res.json(statement.run({threadId : req.params.threadId}))
+  }
+  catch{
+     res.status(400).json({ error: "Something went wrong" });
+  }
 } else{
   res.status(403).json({ error: "Not authorized to access" });
 }
@@ -151,8 +201,12 @@ const getAllThreadsIfUserIsModerator = async (req, res) => {
   let statement = db.prepare(
     /*sql*/ `SELECT t.* FROM threadsXmoderatorUsers as tXm, threads as t WHERE tXm.userId = $userId AND tXm.threadId = t.id`
   );
-  let result = statement.all({userId: parseInt(req.params.userId)})  
-  res.json(result);
+  try{
+
+    res.json(statement.all({ userId: parseInt(req.params.userId) }));
+  }
+  catch{
+ res.status(400).json({ error: "Something went wrong" });  }
 }
 
 const checkIfUserIsModerator =  (userId) => {
@@ -192,14 +246,20 @@ const promoteToModerator = async (req, res) => {
          if(!check){
            promoteToModeratorRole(parseInt(req.params.userId));
          }
+
           let statement = db.prepare(/*sql*/ `
        INSERT into threadsXmoderatorUsers (threadId, userId) VALUES ($threadId, $userId) `)
-       res.json(
-         statement.run({
-           threadId: parseInt(req.params.threadId),
-           userId: parseInt(req.params.userId),
-         })
-       );
+       try{
+res.json(
+  statement.run({
+    threadId: parseInt(req.params.threadId),
+    userId: parseInt(req.params.userId),
+  })
+);
+       } catch{
+          res.status(400).json({ error: "Something went wrong" });
+       }
+       
        }
        else{
          res.status(403).json({ error: "Not authorized to access" });
@@ -215,10 +275,16 @@ const removeModeratorFromThread = async (req, res) => {
        let statement = db.prepare(
          /*sql*/ `DELETE FROM threadsXmoderatorUsers WHERE userId = $userId AND threadId = $threadId`
        );
-       let result = statement.run({
-         userId: parseInt(req.params.userId),
-         threadId: parseInt(req.params.threadId),
-       });
+
+       let result;
+       try{
+         result = statement.run({
+           userId: parseInt(req.params.userId),
+           threadId: parseInt(req.params.threadId),
+         });
+       } catch{
+          res.status(400).json({ error: "Something went wrong" });
+       }
      
        let check = checkIfUserIsModerator(
          parseInt(req.params.userId)

@@ -3,27 +3,32 @@ const db = sqlite3("../cat-forum.db");
 const Encrypt = require("../Security/Encrypt");
 
 const register = async (req, res) => {
-  let uniqueEmail = checkIfEmailIsUnique(req.body.email);
-  let uniqueUsername = checkIfUsernameIsUnique(req.body.username);
+  if (req.body && req.body.email.includes("@")) {
+    let uniqueEmail = checkIfEmailIsUnique(req.body.email);
+    let uniqueUsername = checkIfUsernameIsUnique(req.body.username);
 
-  if (uniqueEmail === true && uniqueUsername === true) {
-    if (req.body.password) {
-      req.body.password = Encrypt.multiEncrypt(req.body.password);
-    }
-    let statement = db.prepare(/*sql*/ `
-INSERT INTO users (email, username, password, roleId) values ($email, $username, $password, $roleId)`);
-    res.json(statement.run(req.body));
-  } else {
-    console.log('in else');
-    if (uniqueEmail === true && uniqueUsername === false) {
-      res.status(400).json({ error: "username" });
-    } else if (uniqueEmail === false && uniqueUsername === true) {
-      res.status(400).json({ error: "email" });
+    if (uniqueEmail === true && uniqueUsername === true) {
+      if (req.body.password) {
+        req.body.password = Encrypt.multiEncrypt(req.body.password);
+      }
+      let statement = db.prepare(/*sql*/ `
+      INSERT INTO users (email, username, password, roleId) values ($email, $username, $password, $roleId)`);
+      try {
+        res.json(statement.run(req.body));
+      } catch {
+        res.status(400).json({ error: "Something went wrong" });
+      }
     } else {
-      res.status(400).json({ error: "username email" });
-
-    
+      if (uniqueEmail === true && uniqueUsername === false) {
+        res.status(400).json({ error: "username" });
+      } else if (uniqueEmail === false && uniqueUsername === true) {
+        res.status(400).json({ error: "email" });
+      } else {
+        res.status(400).json({ error: "username email" });
+      }
     }
+  } else {
+    res.status(400).json({ error: "Not a valid email-address" });
   }
 };
 
@@ -35,7 +40,12 @@ const login = async (req, res) => {
          SELECT u.id, u.email, u.username, r.userRole FROM users as u, roles as r
          WHERE u.email = $email AND u.password = $password AND r.id = u.roleId
       `);
-  let user = statement.get(req.body) || null;
+  let user;
+  try {
+    user = statement.get(req.body) || null;
+  } catch {
+    res.status(400).json({ error: "Something went wrong" });
+  }
   if (user) {
     delete user.password;
     // store the logged in user in a session
