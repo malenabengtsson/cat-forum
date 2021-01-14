@@ -15,8 +15,8 @@ app.use(session({
   store: store({dbPath: '../cat-forum.db'})
 }))
 
-app.listen(8080, () =>{
-  console.log('Listening on port 8080');
+app.listen(7080, () =>{
+  console.log('Listening on port 7080');
 })
 
 app.use("/auth", authRoutes)
