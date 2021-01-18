@@ -4,28 +4,33 @@ const Encrypt = require("../Security/Encrypt");
 
 const register = async (req, res) => {
   if (req.body && req.body.email.includes("@")) {
-    let uniqueEmail = checkIfEmailIsUnique(req.body.email);
-    let uniqueUsername = checkIfUsernameIsUnique(req.body.username);
+    if(req.body.roleId === 1){
+let uniqueEmail = checkIfEmailIsUnique(req.body.email);
+let uniqueUsername = checkIfUsernameIsUnique(req.body.username);
 
-    if (uniqueEmail === true && uniqueUsername === true) {
-      if (req.body.password) {
-        req.body.password = Encrypt.multiEncrypt(req.body.password);
-      }
-      let statement = db.prepare(/*sql*/ `
+if (uniqueEmail === true && uniqueUsername === true) {
+  if (req.body.password) {
+    req.body.password = Encrypt.multiEncrypt(req.body.password);
+  }
+  let statement = db.prepare(/*sql*/ `
       INSERT INTO users (email, username, password, roleId) values ($email, $username, $password, $roleId)`);
-      try {
-        res.json(statement.run(req.body));
-      } catch {
-        res.status(400).json({ error: "Something went wrong" });
-      }
-    } else {
-      if (uniqueEmail === true && uniqueUsername === false) {
-        res.status(400).json({ error: "username" });
-      } else if (uniqueEmail === false && uniqueUsername === true) {
-        res.status(400).json({ error: "email" });
-      } else {
-        res.status(400).json({ error: "username email" });
-      }
+  try {
+    res.json(statement.run(req.body));
+  } catch {
+    res.status(400).json({ error: "Something went wrong" });
+  }
+} else {
+  if (uniqueEmail === true && uniqueUsername === false) {
+    res.status(400).json({ error: "username" });
+  } else if (uniqueEmail === false && uniqueUsername === true) {
+    res.status(400).json({ error: "email" });
+  } else {
+    res.status(400).json({ error: "username email" });
+  }
+}
+    }
+    else{
+      res.status(403).json({error: "You can only create a user with id 1"})
     }
   } else {
     res.status(400).json({ error: "Not a valid email-address" });
