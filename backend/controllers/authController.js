@@ -12,6 +12,10 @@ const register = async (req, res) => {
           return
         }
       }
+      if(req.body.username === ''){
+         res.status(400).json({ error: "Username cant be empty" });
+         return;
+      }
 let uniqueEmail = checkIfEmailIsUnique(req.body.email);
 let uniqueUsername = checkIfUsernameIsUnique(req.body.username);
 

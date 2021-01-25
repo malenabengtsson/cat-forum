@@ -13,9 +13,6 @@ const RegisterModal = (props) => {
     e.preventDefault();
 
     if(password.length >= 6){
-
-    
-
     let userInformation = {
       email: email,
       username: username,
