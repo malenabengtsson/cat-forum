@@ -12,6 +12,10 @@ const RegisterModal = (props) => {
   const performRegistration = async (e) => {
     e.preventDefault();
 
+    if(password.length >= 6){
+
+    
+
     let userInformation = {
       email: email,
       username: username,
@@ -40,11 +44,15 @@ const RegisterModal = (props) => {
       fetchUser();
       props.setModalIsOpen(!props.modalIsOpen);
     }
+  }
+  else{
+    setErrorMessage("Password has to be longer than 5 letters")
+  }
   };
   return (
     <div className="mx-auto authentication-modals">
       <h2 className="mt-4 text-center font-weight-bold col-sm-12 col-lg-12">
-        Registrera
+        Register
       </h2>
       <ModalBody className="m-4">
         <Form onSubmit={performRegistration} className="row">

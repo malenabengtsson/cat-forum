@@ -5,6 +5,13 @@ const Encrypt = require("../Security/Encrypt");
 const register = async (req, res) => {
   if (req.body && req.body.email.includes("@")) {
     if(req.body.roleId === 1){
+      if(req.body.password != undefined){
+        let passwordValidation = checkPasswordLength(req.body.password)
+        if(!passwordValidation){
+          res.status(400).json({ error: "Password must be longer than 5 characters" });
+          return
+        }
+      }
 let uniqueEmail = checkIfEmailIsUnique(req.body.email);
 let uniqueUsername = checkIfUsernameIsUnique(req.body.username);
 
@@ -86,6 +93,15 @@ const checkIfUsernameIsUnique = (username) => {
     return true;
   }
 };
+
+const checkPasswordLength = (password) =>{
+  if(password.length >=6){
+    return true;
+  }
+  else{
+    return false
+  }
+}
 
 const logout = async (req, res) => {
   delete req.session.user;
