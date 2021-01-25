@@ -111,6 +111,13 @@ const createThread = async (req, res) => {
 const createReply = async (req, res) => {
   const permission = ac.can(req.session.user.userRole).createOwn("thread");
   if (permission.granted) {
+    if(req.body.warning === 1){
+      let userCanPostWarning = checkIfUserIsModeratorForThread(req.session.user.id, parseInt(req.params.threadId))
+      if(!userCanPostWarning){
+      res.status(403).json({ error: "Logged in user isn't moderator for thread" });
+      return
+      }
+    }
     let statement = db.prepare(/*sql*/ `INSERT INTO replies (message, threadId, timestamp, sender, warning) VALUES ($message, $threadId, $timestamp, $sender, $warning)
    `);
     try {
@@ -119,7 +126,7 @@ const createReply = async (req, res) => {
           message: req.body.message,
           threadId: req.params.threadId,
           timestamp: Date.now(),
-          sender: req.body.sender,
+          sender: req.session.user.username,
           warning: req.body.warning,
         })
       );
@@ -206,6 +213,17 @@ const checkIfUserIsModerator = (userId) => {
     return false;
   }
 };
+
+const checkIfUserIsModeratorForThread = (userId, threadId) => {
+  let statement = db.prepare(/*sql*/`SELECT * FROM threadsXmoderatorUsers WHERE userId = $userId AND threadId = $threadId`)
+  let result = statement.all({userId: userId,
+  threadId: threadId})
+  if (result.length > 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 const demoteToBasicUser = (userId) => {
   let statement = db.prepare(/*sql*/ `UPDATE users SET roleId = 1 WHERE id 

@@ -38,7 +38,6 @@ const ReplyList = () => {
     e.preventDefault();
     let replyInformation = {
       message: newReply,
-      sender: user.username,
       warning: warningReply === true ? 1 : 0,
     };
 
