@@ -88,7 +88,14 @@ const getUserByUsername = async (req, res) => {
   }
 };
 const createThread = async (req, res) => {
-  const permission = ac.can(req.session.user.userRole).createOwn("thread");
+  let permission;
+  if (req.session.user) {
+     permission = ac.can(req.session.user.userRole).createOwn("thread");
+  }
+  else{
+    res.status(403).json({ error: "Not authorized to access" });
+    return
+  }
   if (permission.granted) {
     let statement = db.prepare(/*sql*/ `
    INSERT into threads (title, subjectId, creator, locked) VALUES ($title, $subjectId, $creator, $locked)`);
@@ -109,7 +116,14 @@ const createThread = async (req, res) => {
   }
 };
 const createReply = async (req, res) => {
-  const permission = ac.can(req.session.user.userRole).createOwn("thread");
+   let permission;
+  if (req.session.user) {
+ permission = ac.can(req.session.user.userRole).createOwn("thread");
+  }
+  else{
+  res.status(403).json({ error: "Not authorized to access" });
+  return
+  }
   if (permission.granted) {
     if(req.body.warning === 1){
       let userCanPostWarning = checkIfUserIsModeratorForThread(req.session.user.id, parseInt(req.params.threadId))
@@ -139,9 +153,17 @@ const createReply = async (req, res) => {
 };
 
 const deleteReply = async (req, res) => {
-  const permission = ac
-    .can(req.session.user.userRole)
-    .deleteAny("replyIfModerator");
+  let permission;
+  if(req.session.user){
+ permission = ac
+  .can(req.session.user.userRole)
+  .deleteAny("replyIfModerator");
+  }
+  else{
+      res.status(403).json({ error: "Not authorized to access" });
+      return;
+  }
+  
   if (permission.granted) {
     let statement = db.prepare(/*sql*/ `
     DELETE FROM replies WHERE id = $replyId`);
@@ -157,7 +179,14 @@ const deleteReply = async (req, res) => {
 };
 
 const deleteUser = (req, res) => {
-  const permission = ac.can(req.session.user.userRole).deleteAny("user");
+  let permission;
+  if(req.session.user){
+    permission = ac.can(req.session.user.userRole).deleteAny("user");
+  }
+  else{
+      res.status(403).json({ error: "Not authorized to access" });
+      return;
+  }
 
   if (permission.granted) {
     let deleteStatement = db.prepare(
@@ -178,7 +207,14 @@ const deleteUser = (req, res) => {
 };
 
 const lockThread = async (req, res) => {
-  const permission = ac.can(req.session.user.userRole).updateAny("thread");
+  let permission;
+  if(req.session.user){
+    permission = ac.can(req.session.user.userRole).updateAny("thread");
+  }
+  else{
+      res.status(403).json({ error: "Not authorized to access" });
+      return;
+  }
   if (permission.granted) {
     let statement = db.prepare(/*sql*/ `
   UPDATE threads SET locked = 1 WHERE id = $threadId`);
@@ -238,7 +274,14 @@ const promoteToModeratorRole = (userId) => {
 };
 
 const promoteToModerator = async (req, res) => {
-  const permission = ac.can(req.session.user.userRole).updateAny("user");
+  let permission;
+  if(req.session.user){
+     permission = ac.can(req.session.user.userRole).updateAny("user");
+  }
+  else{
+      res.status(403).json({ error: "Not authorized to access" });
+      return;
+  }
 
   if (permission.granted) {
     let check = checkIfUserIsModerator(parseInt(req.params.userId));
@@ -264,7 +307,15 @@ const promoteToModerator = async (req, res) => {
 };
 
 const removeModeratorFromThread = async (req, res) => {
-  const permission = ac.can(req.session.user.userRole).updateAny("user");
+  let permission;
+  if(req.session.user){
+
+   permission = ac.can(req.session.user.userRole).updateAny("user");
+  }
+  else{
+      res.status(403).json({ error: "Not authorized to access" });
+      return;
+  }
 
   if (permission.granted) {
     let statement = db.prepare(
